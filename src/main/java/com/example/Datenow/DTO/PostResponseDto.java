@@ -3,14 +3,15 @@ package com.example.Datenow.DTO;
 import com.example.Datenow.domain.Category;
 import com.example.Datenow.domain.Comment;
 import com.example.Datenow.domain.Post.Post;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.HashMap;
 import java.util.List;
 
 // Response : Get, 조회
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 public class PostResponseDto {
     private String title; // 제목

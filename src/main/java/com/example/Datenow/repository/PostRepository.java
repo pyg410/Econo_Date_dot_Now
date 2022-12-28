@@ -2,7 +2,6 @@ package com.example.Datenow.repository;
 
 import com.example.Datenow.domain.Category;
 import com.example.Datenow.domain.Post.Post;
-import com.example.Datenow.domain.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

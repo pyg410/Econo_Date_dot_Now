@@ -35,10 +35,10 @@ public class PostLike {
 //        this.user = user;
 //        user.mappingPostLike(this);
 //    }
-//
-//    public void mappingPost(Post post) {
-//        this.post = post;
-//        post.mappingPostLike(this);
-//    }
+
+    public void mappingPost(Post post) {
+        this.post = post;
+        post.mappingPostLike(this);
+    }
 
 }

@@ -3,6 +3,7 @@ package com.example.Datenow.DTO;
 import com.example.Datenow.domain.*;
 import com.example.Datenow.domain.Post.Post;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +13,7 @@ import java.util.List;
 
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 // Dto class에 toEntity 함수를 정의해서 entity로 바꿀수 있다. (DB에 등록할때 쓰임)
 public class PostRequestDto {
 
@@ -23,6 +24,7 @@ public class PostRequestDto {
 
     private User writer; // 작성자
 
+    @NotBlank(message = "카테고리를 선택해주세요.")
     private Category category;
 
     private List<HashMap<Double, Double>> map;

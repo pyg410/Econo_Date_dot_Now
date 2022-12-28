@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.example.Datenow.DTO.CommentResponseDto;
 import com.example.Datenow.domain.Category;
 import com.example.Datenow.domain.Comment;
 import com.example.Datenow.domain.User;
@@ -39,10 +40,8 @@ public class Post{
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<PostLike> postLikeList = new ArrayList<>(); // 좋아요 리스트
 
-
     @ElementCollection
     private List<HashMap<Double, Double>> postMapList = new ArrayList<>(); // 맵 위치 리스트
-
 
     private String imageUrl; // 이미지 경로
 
@@ -62,18 +61,18 @@ public class Post{
     private LocalDateTime modifiedDate; // 수정일
 
     @Builder
-    public Post(String title, String content, User user, Category category, List<HashMap<Double, Double>> postMapList, int viewCnt, int scrapCnt, int recommendCnt, String imageUrl) {
+    public Post(String title, String content, User user, Category category, List<Comment> commentList, List<HashMap<Double, Double>> postMapList, int viewCnt, int scrapCnt, int recommendCnt, String imageUrl) {
         this.title = title;
         this.content = content;
         this.user = user;
         this.category = category;
         this.postMapList = postMapList;
+        this.commentList = commentList;
         this.viewCnt = viewCnt;
         this.scrapCnt = scrapCnt;
         this.recommendCnt = recommendCnt;
         this.imageUrl = imageUrl;
     }
-
 
     public void mappingPostLike(PostLike postLike) {
         this.postLikeList.add(postLike);
@@ -95,7 +94,6 @@ public class Post{
     public void discountLike(PostLike postLike) {
         this.postLikeList.remove(postLike);
     }
-
 
     public void updateLikeCount() {
         this.recommendCnt = (int) this.postLikeList.size();
