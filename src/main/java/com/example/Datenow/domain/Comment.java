@@ -51,6 +51,6 @@ public class Comment {
         this.user = user;
 
         post.mappingComment(this);
-        //user.mappingComment(this);
+        user.mappingComment(this);
     }
 }

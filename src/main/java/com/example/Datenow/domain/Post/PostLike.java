@@ -31,10 +31,10 @@ public class PostLike {
     }
 
     // 매핑 연관 관계 메소드를 왜 만들어야 하는가?
-//    public void mappingUser(User user) {
-//        this.user = user;
-//        user.mappingPostLike(this);
-//    }
+    public void mappingUser(User user) {
+        this.user = user;
+        user.mappingPostLike(this);
+    }
 
     public void mappingPost(Post post) {
         this.post = post;

@@ -29,12 +29,12 @@ public class Post{
 
     private String content; // 내용
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) // FetchType.Lazy는 JPA의 프록시와 지연로딩의 기초적인 내용을 공부해야한다.
+    @ManyToOne(fetch = FetchType.LAZY) // FetchType.Lazy는 JPA의 프록시와 지연로딩의 기초적인 내용을 공부해야한다.
     @JoinColumn(name = "user_id") // FK이름 지정
     private User user; // User 객체 자체를 저장받고, 반환할 때는 Post에 저장된 USER.getUsername 반환
 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE) // 부모쪽에 cascade = CascadeType.REMOVE 설정
     private List<Comment> commentList = new ArrayList<>(); // 댓글들
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
@@ -45,7 +45,7 @@ public class Post{
 
     private String imageUrl; // 이미지 경로
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private Category category; // 카테고리
 
     private int viewCnt; // 조회 수
@@ -80,7 +80,7 @@ public class Post{
 
     public void mappingUser(User user) {
         this.user = user;
-        //user.mappingPost(this);
+        user.mappingPost(this);
     }
 
     public void mappingComment(Comment comment) {

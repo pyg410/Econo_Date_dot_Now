@@ -9,8 +9,10 @@ import com.example.Datenow.domain.Post.PostLike;
 import com.example.Datenow.domain.User;
 import com.example.Datenow.repository.PostLikeRepository;
 import com.example.Datenow.repository.PostRepository;
+import com.example.Datenow.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,27 +20,31 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class PostService {
 
+    // 본인 엔티티 Repository는 그냥 Repository라 네이밍한다.
     @Autowired
-    private final PostRepository postRepository;
+    private final PostRepository Repository;
 
     @Autowired
     private final PostLikeRepository postLikeRepository;
 
+    @Autowired
+    private final UserRepository userRepository;
+
     // 게시글 생성
-    public Post save(PostRequestDto postDTO, Long user_id) {
-        //User user = getUserInService(user_id);
+    public Post save(PostRequestDto postDTO, Long userId) {
+        Optional<User> optUser = userRepository.findById(userId);
+        User user = optUser.get();
 
         Post post = Post.builder()
                 .title(postDTO.getTitle())
                 .content(postDTO.getContent())
-                //.user(user)
+                .user(user)
                 .category(postDTO.getCategory())
                 .postMapList(postDTO.getMap())
                 .viewCnt(0)
@@ -47,39 +53,44 @@ public class PostService {
                 .imageUrl(postDTO.getImageUrl())
                 .build();
 
-        // post.mappingUser(user);
+         post.mappingUser(user);
 
-        return postRepository.save(post);
+        return Repository.save(post);
     }
 
     // 게시글 삭제
-    public void delete(Long postId, Long user_id) {
-        Optional<Post> optPost = postRepository.findById(postId);
+    public void delete(Long postId, Long userId) {
+        Optional<Post> optPost = Repository.findById(postId);
         Post post = optPost.get();
 
-//        if (post.getUser().getEmail().equals(user_id)) {
-//            postRepository.delete(post);
-//        } else {
-//            throw new AuthorizationServiceException("권한이 없습니다.");
-//        }
+        if (post.getUser().getId().equals(userId)) {
+            Repository.delete(post);
+        } else {
+            throw new AuthorizationServiceException("권한이 없습니다.");
+        }
     }
 
     // 게시글 좋아요
-    public void postLike(Long postId, String email) {
+    public void postLike(Long postId, Long userId) {
         Post post = getPostInService(postId);
-        //User user = getUserInService(email);
+        Optional<User> optUser = userRepository.findById(userId);
+        User user = optUser.get();
+
+        // PostLike 객체를 가져온다.
         Optional<PostLike> byPostAndUser = postLikeRepository.findByPostAndUser(post, user);
 
+        // PostLike 객체가 있다면 == 좋아요를 이미 눌렀다면, PostLike 객체에서 삭제하고, 좋아요를 취소한다.
         byPostAndUser.ifPresentOrElse(
                 postLike -> {
                     postLikeRepository.delete(postLike);
                     post.discountLike(postLike);
                 },
                 () -> {
+                    // PostLike 객체가 없다면 == 좋아요를 누르지않았다면 PostLike 객체를 만들어주고,
                     PostLike postLike = PostLike.builder().build();
 
                     postLike.mappingPost(post);
-                    //postLike.mappingUser(user);
+                    postLike.mappingUser(user);
                     post.updateLikeCount();
 
                     postLikeRepository.save(postLike);
@@ -90,7 +101,7 @@ public class PostService {
     // 게시글 한개 반환
     @Transactional(readOnly = true)
     public PostResponseDto findById(Long postId) {
-        Optional<Post> optPost = postRepository.findById(postId);
+        Optional<Post> optPost = Repository.findById(postId);
         Post post = optPost.get();
 
         post.addViewCount();
@@ -103,7 +114,7 @@ public class PostService {
                 .category(post.getCategory())
                 .viewCnt(post.getViewCnt())
                 .recommendCnt(post.getRecommendCnt())
-                //.writer(UserDTO.convertToUserDTO(findPost.getUser()))
+                .writer(post.getUser().getUsername())
                 .map(post.getPostMapList())
                 .scrapCnt(post.getScrapCnt())
                 .comments(commentDTOS)
@@ -112,45 +123,39 @@ public class PostService {
     
     // 서비스 내에서 POST 객체 반환
     private Post getPostInService(Long postId) {
-        Optional<Post> optPost = postRepository.findById(postId);
-        Post post = optPost.get();
-        return post;
+        Optional<Post> optPost = Repository.findById(postId);
+        return optPost.get();
     }
     
     // 게시글 전체 반환
     @Transactional(readOnly = true)
     public List<PostResponseDto> findAll() {
 
-        Stream<Post> stream = postRepository.findAll().stream();
-
-        return stream.map(PostResponseDto::FromManyPost).collect(Collectors.toList());
+        return Repository.findAll().stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
     }
 
     // 게시글 제목 검색 결고 반환
     @Transactional(readOnly = true)
     public List<PostResponseDto> findByTitleContaining(String search) {
 
-        Stream<Post> stream = postRepository.findByTitleContaining(search).stream();
-
-        return stream.map(PostResponseDto::FromDetailPost).collect(Collectors.toList());
+        return Repository.findByTitleContaining(search).stream().map(PostResponseDto::fromDetailPost).collect(Collectors.toList());
     }
 
     // 게시글 추천순 반환
     @Transactional
-    public List<PostResponseDto> findAllByOrderByRecommendCntDesc() {
-        Stream<Post> stream = postRepository.findAllByOrderByRecommendCntDesc().stream();
-
-        return stream.map(PostResponseDto::FromManyPost).collect(Collectors.toList());
+        public List<PostResponseDto> findAllByOrderByRecommendCntDesc() {
+        /*
+        Post 자료형을 가진 스트림 내 요소들을 PostResponseDto.FromManyPost 맞게 바꿔준 후 하나의 리스트로 만들어준다.
+         */
+        return Repository.findAllByOrderByRecommendCntDesc().stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
     }
 
     // 카테코리별 게시글
     @Transactional
     public List<PostResponseDto> findByCategory(Category category){
-        Stream<Post> stream = postRepository.findByCategory(category).stream();
         /*
-        즉 Post 자료형을 가진 스트림 내 요소들을 PostResponseDto.FromManyPost 맞게 바꿔준 후 하나의 리스트로 만들어준다.
+        Post 자료형을 가진 스트림 내 요소들을 PostResponseDto.FromManyPost 맞게 바꿔준 후 하나의 리스트로 만들어준다.
          */
-        return stream.map(PostResponseDto::FromManyPost).collect(Collectors.toList());
+        return Repository.findByCategory(category).stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
     }
-
 }

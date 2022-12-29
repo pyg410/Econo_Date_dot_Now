@@ -26,11 +26,9 @@ public class PostResponseDto {
 
     // entity -> dto
     // Controller에서 Response DTO 형태로 Client에 전달한다.
-    public static PostResponseDto From(Post post) { // toDto로 변환
+    public static PostResponseDto from(Post post) { // toDto로 변환
         return PostResponseDto.builder()
-                .title(post.getTitle())
-                .content(post.getContent())
-                //.writer(post.getUser().getUsername()) String으로 반환하기
+                .writer(post.getUser().getUsername()) //String으로 반환하기
                 .category(post.getCategory())
                 .map(post.getPostMapList())
                 .viewCnt(post.getViewCnt())
@@ -40,23 +38,24 @@ public class PostResponseDto {
     }
     
     // FromMany : 글 여러개 반환하기
-    public static PostResponseDto FromManyPost(Post post) {
+    public static PostResponseDto fromManyPost(Post post) {
         return PostResponseDto.builder()
                 .title(post.getTitle())
-                .content(post.getContent())
-                //.writer(post.getUser().getUsername())
+                .writer(post.getUser().getUsername())
                 .recommendCnt(post.getRecommendCnt())
+                .category(post.getCategory())
                 .build();
     }
 
     // FromMany : 글 한개 반환하기
-    public static PostResponseDto FromDetailPost(Post post) {
+    public static PostResponseDto fromDetailPost(Post post) {
         return PostResponseDto.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
-                //.writer(post.getUser().getUsername())
+                .writer(post.getUser().getUsername())
                 .comments(CommentResponseDto.FromCommentList(post.getCommentList()))
                 .viewCnt(post.getViewCnt())
+                .category(post.getCategory())
                 .build();
     }
 }

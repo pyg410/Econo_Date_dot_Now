@@ -1,21 +1,67 @@
 package com.example.Datenow.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.example.Datenow.domain.Comment;
+import com.example.Datenow.domain.Post.Post;
+import com.example.Datenow.domain.Post.PostLike;
+import lombok.*;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-
+@Entity
 @Setter
 @Getter
-@Entity
-@Table(name="DATEUSER")
-public class User {
+@Table(name = "UUserr")
+public class User  {
 
     @Id
-    @Column(name = "user_id")
-    private Long id; // PK
+    private Long id;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
-//    private List<Post> posts = new ArrayList<>(); // 게시글들
+    private String nickname;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Post> postList = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<PostLike> postLikeList = new ArrayList<>();
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public void encryptPassword(String password) {
+//
+//        this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+//    }
+
+    public void mappingPost(Post post) {
+        postList.add(post);
+    }
+
+    public void mappingComment(Comment comment) {
+        commentList.add(comment);
+    }
+
+    public void mappingPostLike(PostLike postLike) {
+        this.postLikeList.add(postLike);
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        Set<GrantedAuthority> auth = new HashSet<>();
+//        auth.add(new SimpleGrantedAuthority(authority));
+//
+//        return auth;
+//    }
+
+    public String getUsername() {
+        return this.getNickname();
+    }
+
 }

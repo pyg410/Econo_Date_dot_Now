@@ -18,12 +18,12 @@ public class CommentResponseDto {
 
     private Post post;
 
-    private User writer;
+    private String writer;
 
     public static CommentResponseDto FromComment(Comment comment) {
         return CommentResponseDto.builder()
                 .content(comment.getContent())
-                //.writer(comment.getUser().getUsername())
+                .writer(comment.getUser().getUsername())
                 .build();
     }
 
