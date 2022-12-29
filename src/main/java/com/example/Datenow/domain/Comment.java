@@ -25,7 +25,7 @@ public class Comment {
 
     @Column(name = "created_date")
     @CreatedDate
-    private LocalDateTime createdDate = java.time.LocalDateTime.now(); // 댓글 작성 날짜
+    private LocalDateTime createdDate; // 댓글 작성 날짜
 
     @Column(name = "modified_date")
     @LastModifiedDate

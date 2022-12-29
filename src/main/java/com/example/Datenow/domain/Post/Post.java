@@ -74,6 +74,14 @@ public class Post{
         this.imageUrl = imageUrl;
     }
 
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeContents(String contents) {
+        this.content = content;
+    }
+
     public void mappingPostLike(PostLike postLike) {
         this.postLikeList.add(postLike);
     }

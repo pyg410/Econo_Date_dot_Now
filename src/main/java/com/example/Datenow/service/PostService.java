@@ -57,7 +57,24 @@ public class PostService {
 
         return Repository.save(post);
     }
+    
+    // 게시글 수정
+    public PostResponseDto updatePost(Long postId, PostRequestDto postDTO, Long userId) {
+        Post post = getPostInService(postId);
+        
+        // 만약 글 작성자와 현 유저의 id가 같다면
+        if (post.getUser().getId().equals(userId)) {
+            // 글의 제목과 내용을 입력받은대로 수정해라
+            post.changeTitle(postDTO.getTitle());
+            post.changeContents(postDTO.getContent());
+            // 수정하고, 수정한 Post를 반환해라
+            return PostResponseDto.fromDetailPost(post);
 
+        } else {
+            throw new AuthorizationServiceException("권한이 없습니다.");
+        }
+    }
+    
     // 게시글 삭제
     public void delete(Long postId, Long userId) {
         Optional<Post> optPost = Repository.findById(postId);
@@ -134,7 +151,7 @@ public class PostService {
         return Repository.findAll().stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
     }
 
-    // 게시글 제목 검색 결고 반환
+    // 게시글 제목 검색 결과 반환
     @Transactional(readOnly = true)
     public List<PostResponseDto> findByTitleContaining(String search) {
 
@@ -150,6 +167,24 @@ public class PostService {
         return Repository.findAllByOrderByRecommendCntDesc().stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
     }
 
+    // 게시글 최신순 반환
+    @Transactional
+    public List<PostResponseDto> findAllByOrderByCreatedDateDesc() {
+        /*
+        Post 자료형을 가진 스트림 내 요소들을 PostResponseDto.FromManyPost 맞게 바꿔준 후 하나의 리스트로 만들어준다.
+         */
+        return Repository.findAllByOrderByCreatedDateDesc().stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
+    }
+
+    // 게시글 오래된순 반환
+    @Transactional
+    public List<PostResponseDto> findAllByOrderByCreatedDateAsc() {
+        /*
+        Post 자료형을 가진 스트림 내 요소들을 PostResponseDto.FromManyPost 맞게 바꿔준 후 하나의 리스트로 만들어준다.
+         */
+        return Repository.findAllByOrderByCreatedDateAsc().stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
+    }
+    
     // 카테코리별 게시글
     @Transactional
     public List<PostResponseDto> findByCategory(Category category){

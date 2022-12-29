@@ -77,6 +77,61 @@ class PostServiceTest {
     }
 
     @Test
+    void updatePost() {
+        // User, Post 생성
+        User user = new User();
+        user.setId(1L);
+        user.setNickname("봉봉");
+        userRepository.save(user);
+
+
+        // Map 생성
+        HashMap<Double, Double> map = new HashMap<>();
+        map.put(12.312312, 12.123123);
+
+        List<HashMap<Double, Double>> mapArray = new ArrayList<>();
+        mapArray.add(map);
+
+        List<Comment> commentList = new ArrayList<>();
+
+        PostRequestDto oldPost = PostRequestDto.builder()
+                .title("hihi")
+                .content("네네네네반가워요")
+                .writer(user)
+                .category(실내데이트)
+                .map(mapArray)
+                .viewCnt(0)
+                .scrapCnt(0)
+                .recommendCnt(0)
+                .imageUrl("dasdasdasdsa")
+                .build();
+
+        Post post = oldPost.toEntity();
+        postRepository.save(post);
+
+        PostRequestDto newPost = PostRequestDto.builder()
+                .title("업데이트 했어용")
+                .content("업데이트 되었습니다.")
+                .writer(user)
+                .category(실내데이트)
+                .map(mapArray)
+                .viewCnt(0)
+                .scrapCnt(0)
+                .recommendCnt(0)
+                .imageUrl("dasdasdasdsa")
+                .build();
+
+
+        Post entityPost = postRepository.save(newPost.toEntity());
+        PostResponseDto postResponseDto = PostResponseDto.fromUpdatePost(entityPost);
+
+        System.out.println("answer : " + postResponseDto.getTitle() + " " + postResponseDto.getContent());
+
+
+
+    }
+
+    @Test
     void delete() {
         // User, Post 생성
         User user = new User();

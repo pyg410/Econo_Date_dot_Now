@@ -58,4 +58,11 @@ public class PostResponseDto {
                 .category(post.getCategory())
                 .build();
     }
+
+    public static PostResponseDto fromUpdatePost(Post post) {
+        return  PostResponseDto.builder()
+                .title(post.getTitle())
+                .content(post.getContent())
+                .build();
+    }
 }

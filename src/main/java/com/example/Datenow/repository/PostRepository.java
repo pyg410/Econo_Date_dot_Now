@@ -33,7 +33,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     // 추천순 정렬
     List<Post> findAllByOrderByRecommendCntDesc();
 
+    // 최신순 정렬
+    List<Post> findAllByOrderByCreatedDateDesc();
 
+    // 오래된 순 정렬
+    List<Post> findAllByOrderByCreatedDateAsc();
+    
     // 카테코리별 게시글
     @Query("select m from Post m where m.category = :category")
     List<Post> findByCategory(@Param("category") Category category);
@@ -43,6 +48,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByTitleContaining(String keyword);
 
 
+    
     // 작성자별 게시글
 //    @Query("select m from Post m where m.username = :username")
 //    List<Post> findByUsername(@Param("username") String username);
