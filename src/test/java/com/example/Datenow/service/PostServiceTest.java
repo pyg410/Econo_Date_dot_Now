@@ -44,7 +44,6 @@ class PostServiceTest {
 
     @Test
     void save() {
-        // User, Post 생성
         User user = new User();
         user.setId(1L);
         user.setNickname("봉봉");
@@ -60,19 +59,17 @@ class PostServiceTest {
         PostRequestDto newpost = PostRequestDto.builder()
                 .title("hihi")
                 .content("네네네네반가워요")
-                .writer(user)
                 .category(실내데이트)
-                .map(mapArray)
-                .viewCnt(0)
-                .scrapCnt(0)
-                .recommendCnt(0)
+                .lat(2.123123)
+                .lng(1.23232)
                 .imageUrl("dasdasdasdsa")
                 .build();
 
         // Post 등록
         Post post = postService.save(newpost, 1L);
 
-        System.out.println("answer" +  post);
+
+        System.out.println("answer" +  PostResponseDto.fromUpdatePost(post));
 
     }
 

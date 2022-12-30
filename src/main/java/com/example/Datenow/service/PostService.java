@@ -12,11 +12,13 @@ import com.example.Datenow.repository.PostRepository;
 import com.example.Datenow.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AuthorizationServiceException;
+//import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,28 +39,39 @@ public class PostService {
     private final UserRepository userRepository;
 
     // 게시글 생성
+    @Transactional
     public Post save(PostRequestDto postDTO, Long userId) {
+
         Optional<User> optUser = userRepository.findById(userId);
         User user = optUser.get();
+
+        HashMap<Double, Double> map = new HashMap<>();
+        map.put(postDTO.getLat(), postDTO.getLng());
+
+        List<HashMap<Double, Double>> mapArray = new ArrayList<>();
+        mapArray.add(map);
 
         Post post = Post.builder()
                 .title(postDTO.getTitle())
                 .content(postDTO.getContent())
                 .user(user)
                 .category(postDTO.getCategory())
-                .postMapList(postDTO.getMap())
+                .postMapList(mapArray)
                 .viewCnt(0)
                 .scrapCnt(0)
                 .recommendCnt(0)
                 .imageUrl(postDTO.getImageUrl())
                 .build();
 
-         post.mappingUser(user);
+        post.mappingUser(user);
 
-        return Repository.save(post);
+        Post responsePost = Repository.save(post);
+
+        return responsePost;
     }
     
     // 게시글 수정
+    @Transactional
     public PostResponseDto updatePost(Long postId, PostRequestDto postDTO, Long userId) {
         Post post = getPostInService(postId);
         
@@ -71,11 +84,12 @@ public class PostService {
             return PostResponseDto.fromDetailPost(post);
 
         } else {
-            throw new AuthorizationServiceException("권한이 없습니다.");
+            throw new IllegalStateException("권한이 없습니다.");
         }
     }
     
     // 게시글 삭제
+    @Transactional
     public void delete(Long postId, Long userId) {
         Optional<Post> optPost = Repository.findById(postId);
         Post post = optPost.get();
@@ -83,11 +97,12 @@ public class PostService {
         if (post.getUser().getId().equals(userId)) {
             Repository.delete(post);
         } else {
-            throw new AuthorizationServiceException("권한이 없습니다.");
+            throw new IllegalStateException("권한이 없습니다.");
         }
     }
 
     // 게시글 좋아요
+    @Transactional
     public void postLike(Long postId, Long userId) {
         Post post = getPostInService(postId);
         Optional<User> optUser = userRepository.findById(userId);
@@ -159,7 +174,7 @@ public class PostService {
     }
 
     // 게시글 추천순 반환
-    @Transactional
+    @Transactional(readOnly = true)
         public List<PostResponseDto> findAllByOrderByRecommendCntDesc() {
         /*
         Post 자료형을 가진 스트림 내 요소들을 PostResponseDto.FromManyPost 맞게 바꿔준 후 하나의 리스트로 만들어준다.
@@ -168,7 +183,7 @@ public class PostService {
     }
 
     // 게시글 최신순 반환
-    @Transactional
+    @Transactional(readOnly = true)
     public List<PostResponseDto> findAllByOrderByCreatedDateDesc() {
         /*
         Post 자료형을 가진 스트림 내 요소들을 PostResponseDto.FromManyPost 맞게 바꿔준 후 하나의 리스트로 만들어준다.
@@ -177,7 +192,7 @@ public class PostService {
     }
 
     // 게시글 오래된순 반환
-    @Transactional
+    @Transactional(readOnly = true)
     public List<PostResponseDto> findAllByOrderByCreatedDateAsc() {
         /*
         Post 자료형을 가진 스트림 내 요소들을 PostResponseDto.FromManyPost 맞게 바꿔준 후 하나의 리스트로 만들어준다.
@@ -186,7 +201,7 @@ public class PostService {
     }
     
     // 카테코리별 게시글
-    @Transactional
+    @Transactional(readOnly = true)
     public List<PostResponseDto> findByCategory(Category category){
         /*
         Post 자료형을 가진 스트림 내 요소들을 PostResponseDto.FromManyPost 맞게 바꿔준 후 하나의 리스트로 만들어준다.

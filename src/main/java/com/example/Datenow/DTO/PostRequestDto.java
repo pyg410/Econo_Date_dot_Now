@@ -17,24 +17,18 @@ import java.util.List;
 // Dto class에 toEntity 함수를 정의해서 entity로 바꿀수 있다. (DB에 등록할때 쓰임)
 public class PostRequestDto {
 
-    @NotBlank(message = "제목을 입력하세요")
     private String title; // 제목
-    @NotBlank(message = "내용을 입력하세요")
     private String content; // 내용
 
     private User writer; // 작성자
 
-    @NotBlank(message = "카테고리를 선택해주세요.")
     private Category category;
 
+    private Double lat;
+
+    private Double lng;
+
     private List<HashMap<Double, Double>> map;
-
-    private int viewCnt;
-
-    private int scrapCnt;
-
-    private int recommendCnt;
-
 
     private String imageUrl;
 

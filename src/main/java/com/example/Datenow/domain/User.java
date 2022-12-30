@@ -4,7 +4,6 @@ import com.example.Datenow.domain.Comment;
 import com.example.Datenow.domain.Post.Post;
 import com.example.Datenow.domain.Post.PostLike;
 import lombok.*;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
