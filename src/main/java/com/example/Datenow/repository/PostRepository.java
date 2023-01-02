@@ -2,7 +2,8 @@ package com.example.Datenow.repository;
 
 import com.example.Datenow.domain.Category;
 import com.example.Datenow.domain.Post.Post;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,7 +16,7 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     // 게시글 전체 반환
-    List<Post> findAll(Sort sort);
+    Page<Post> findAll(Pageable pageable);
 
 
     // 게시글 1개 반환
@@ -31,24 +32,25 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 
     // 추천순 정렬
-    List<Post> findAllByOrderByRecommendCntDesc();
+    List<Post> findAllByOrderByRecommendCntDesc(Pageable pageable);
 
     // 최신순 정렬
-    List<Post> findAllByOrderByCreatedDateDesc();
+    List<Post> findAllByOrderByCreatedDateDesc(Pageable pageable);
 
     // 오래된 순 정렬
-    List<Post> findAllByOrderByCreatedDateAsc();
+    List<Post> findAllByOrderByCreatedDateAsc(Pageable pageable);
 
     // 카테코리별 게시글
     @Query("select m from Post m where m.category = :category")
-    List<Post> findByCategory(@Param("category") Category category);
+    List<Post> findByCategory(Pageable pageable, @Param("category") Category category);
+
 
     // 카테고리별 추천 게시글들
-    List<Post> findByCategoryOrderByRecommendCntDesc(@Param("category") Category category);
+    List<Post> findByCategoryOrderByRecommendCntDesc(Pageable pageable, @Param("category") Category category);
     
     
     // 게시글 검색
-    List<Post> findByTitleContaining(String keyword);
+    List<Post> findByTitleContaining(Pageable pageable, String keyword);
 
     
     

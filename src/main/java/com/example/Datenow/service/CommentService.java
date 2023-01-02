@@ -9,6 +9,7 @@ import com.example.Datenow.repository.CommentRepository;
 import com.example.Datenow.repository.PostRepository;
 import com.example.Datenow.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,9 +21,9 @@ import java.util.Optional;
 @Transactional
 public class CommentService {
 
-    private final CommentRepository Repository;
-    private final PostRepository postRepository;
-    private final UserRepository userRepository;
+    @Autowired private final CommentRepository Repository;
+    @Autowired private final PostRepository postRepository;
+    @Autowired private final UserRepository userRepository;
 
     // 댓글 생성
     @Transactional

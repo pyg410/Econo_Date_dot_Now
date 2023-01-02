@@ -12,11 +12,13 @@ import com.example.Datenow.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import javax.validation.Valid;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,15 +51,15 @@ public class PostController {
     
     // 게시글들 조회
     @GetMapping("api/v1/posts")
-    public ResponseEntity<List<PostResponseDto>> findAll() {
-        List<PostResponseDto> postList = postService.findAll();
+    public ResponseEntity<List<PostResponseDto>> findAll(@PageableDefault(size = 9) Pageable pageable) {
+        List<PostResponseDto> postList = postService.findAll(pageable);
 
         return new ResponseEntity(postList, HttpStatus.OK);
     }
 
     // 게시글 하나 조회
     @GetMapping("api/v1/posts/{id}")
-    public ResponseEntity<PostResponseDto> findById( @PathVariable(name = "id") Long postId) {
+    public ResponseEntity<PostResponseDto> findById(@PathVariable(name = "id") Long postId) {
 
         PostResponseDto post = postService.findById(postId);
 
@@ -66,16 +68,16 @@ public class PostController {
     
     // 게시글 추천순으로 조회
     @GetMapping("api/v1/posts/recommend")
-    public ResponseEntity<List<PostResponseDto>> findAllByOrderByRecommendCntDesc() {
-        List<PostResponseDto> postList = postService.findAllByOrderByRecommendCntDesc();
+    public ResponseEntity<List<PostResponseDto>> findAllByOrderByRecommendCntDesc(@PageableDefault(size = 9) Pageable pageable) {
+        List<PostResponseDto> postList = postService.findAllByOrderByRecommendCntDesc(pageable);
 
         return new ResponseEntity(postList, HttpStatus.OK);
     }
 
     // 게시글 생성 최신순으로 조회
     @GetMapping("api/v1/posts/new")
-    public ResponseEntity<List<PostResponseDto>> findAllByOrderByCreatedDateDesc() {
-        List<PostResponseDto> postList = postService.findAllByOrderByCreatedDateDesc();
+    public ResponseEntity<List<PostResponseDto>> findAllByOrderByCreatedDateDesc(@PageableDefault(size = 9) Pageable pageable) {
+        List<PostResponseDto> postList = postService.findAllByOrderByCreatedDateDesc(pageable);
 
         return new ResponseEntity(postList, HttpStatus.OK);
     }
@@ -83,16 +85,16 @@ public class PostController {
 
     // 게시글 생성 오래된순으로 조회
     @GetMapping("api/v1/posts/old")
-    public ResponseEntity<List<PostResponseDto>> findAllByOrderByCreatedDateAsc() {
-        List<PostResponseDto> postList = postService.findAllByOrderByCreatedDateAsc();
+    public ResponseEntity<List<PostResponseDto>> findAllByOrderByCreatedDateAsc(@PageableDefault(size = 9) Pageable pageable) {
+        List<PostResponseDto> postList = postService.findAllByOrderByCreatedDateAsc(pageable);
 
         return new ResponseEntity(postList, HttpStatus.OK);
     }
     
     // 게시글 검색 제목에 맞게 조회
     @GetMapping("api/v1/posts/title/{title}")
-    public ResponseEntity<List<PostResponseDto>> findByTitleContaining(@PathVariable(name = "title") String postTitle) {
-        List<PostResponseDto> postList = postService.findByTitleContaining(postTitle);
+    public ResponseEntity<List<PostResponseDto>> findByTitleContaining(@PageableDefault(size = 9) Pageable pageable, @PathVariable(name = "title") String postTitle) {
+        List<PostResponseDto> postList = postService.findByTitleContaining(postTitle, pageable);
 
         return new ResponseEntity(postList, HttpStatus.OK);
     }
@@ -100,16 +102,16 @@ public class PostController {
 
     // 게시글 카테고리에 맞게 조회
     @GetMapping("api/v1/posts/category/{category}")
-    public ResponseEntity<List<PostResponseDto>> findByCategory(@PathVariable(name = "category") Category category) {
-        List<PostResponseDto> postList = postService.findByCategory(category);
+    public ResponseEntity<List<PostResponseDto>> findByCategory(@PageableDefault(size = 9) Pageable pageable, @PathVariable(name = "category") Category category) {
+        List<PostResponseDto> postList = postService.findByCategory(category, pageable);
 
         return new ResponseEntity(postList, HttpStatus.OK);
     }
 
     // 게시글 카테고리에 맞게 조회하되 추천순으로 반환
     @GetMapping("api/v1/posts/category-top/{category}")
-    public ResponseEntity<List<PostResponseDto>> findByCategoryOrderByRecommendCntDesc(@PathVariable(name = "category") Category category) {
-        List<PostResponseDto> postList = postService.findByCategoryOrderByRecommendCntDesc(category);
+    public ResponseEntity<List<PostResponseDto>> findByCategoryOrderByRecommendCntDesc(@PageableDefault(size = 5) Pageable pageable, @PathVariable(name = "category") Category category) {
+        List<PostResponseDto> postList = postService.findByCategoryOrderByRecommendCntDesc(category, pageable);
 
         return new ResponseEntity(postList, HttpStatus.OK);
     }

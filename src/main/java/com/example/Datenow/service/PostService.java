@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -168,58 +169,58 @@ public class PostService {
     
     // 게시글 전체 반환
     @Transactional(readOnly = true)
-    public List<PostResponseDto> findAll() {
+    public List<PostResponseDto> findAll(Pageable pageable) {
 
-        return Repository.findAll().stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
+        return Repository.findAll(pageable).stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
     }
 
     // 게시글 제목 검색 결과 반환
     @Transactional(readOnly = true)
-    public List<PostResponseDto> findByTitleContaining(String search) {
+    public List<PostResponseDto> findByTitleContaining(String search, Pageable pageable) {
 
-        return Repository.findByTitleContaining(search).stream().map(PostResponseDto::fromDetailPost).collect(Collectors.toList());
+        return Repository.findByTitleContaining(pageable, search).stream().map(PostResponseDto::fromDetailPost).collect(Collectors.toList());
     }
 
     // 게시글 추천순 반환
     @Transactional(readOnly = true)
-        public List<PostResponseDto> findAllByOrderByRecommendCntDesc() {
+        public List<PostResponseDto> findAllByOrderByRecommendCntDesc(Pageable pageable) {
         /*
         Post 자료형을 가진 스트림 내 요소들을 PostResponseDto.FromManyPost 맞게 바꿔준 후 하나의 리스트로 만들어준다.
          */
-        return Repository.findAllByOrderByRecommendCntDesc().stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
+        return Repository.findAllByOrderByRecommendCntDesc(pageable).stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
     }
 
     // 게시글 최신순 반환
     @Transactional(readOnly = true)
-    public List<PostResponseDto> findAllByOrderByCreatedDateDesc() {
+    public List<PostResponseDto> findAllByOrderByCreatedDateDesc(Pageable pageable) {
         /*
         Post 자료형을 가진 스트림 내 요소들을 PostResponseDto.FromManyPost 맞게 바꿔준 후 하나의 리스트로 만들어준다.
          */
-        return Repository.findAllByOrderByCreatedDateDesc().stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
+        return Repository.findAllByOrderByCreatedDateDesc(pageable).stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
     }
 
     // 게시글 오래된순 반환
     @Transactional(readOnly = true)
-    public List<PostResponseDto> findAllByOrderByCreatedDateAsc() {
+    public List<PostResponseDto> findAllByOrderByCreatedDateAsc(Pageable pageable) {
         /*
         Post 자료형을 가진 스트림 내 요소들을 PostResponseDto.FromManyPost 맞게 바꿔준 후 하나의 리스트로 만들어준다.
          */
-        return Repository.findAllByOrderByCreatedDateAsc().stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
+        return Repository.findAllByOrderByCreatedDateAsc(pageable).stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
     }
     
     // 카테코리별 게시글
     @Transactional(readOnly = true)
-    public List<PostResponseDto> findByCategory(Category category){
+    public List<PostResponseDto> findByCategory(Category category, Pageable pageable){
         /*
         Post 자료형을 가진 스트림 내 요소들을 PostResponseDto.FromManyPost 맞게 바꿔준 후 하나의 리스트로 만들어준다.
          */
-        return Repository.findByCategory(category).stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
+        return Repository.findByCategory(pageable, category).stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
     }
     
     // 카테고리별 추천 게시글들
     @Transactional(readOnly = true)
-    public List<PostResponseDto> findByCategoryOrderByRecommendCntDesc(Category category){
-        return Repository.findByCategoryOrderByRecommendCntDesc(category).stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
+    public List<PostResponseDto> findByCategoryOrderByRecommendCntDesc(Category category, Pageable pageable){
+        return Repository.findByCategoryOrderByRecommendCntDesc(pageable, category).stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
     }
 
 }

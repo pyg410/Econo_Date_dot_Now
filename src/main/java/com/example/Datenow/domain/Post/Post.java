@@ -84,7 +84,7 @@ public class Post{
     }
 
     public void changeContents(String contents) {
-        this.content = content;
+        this.content = contents;
     }
 
     public void mappingPostLike(PostLike postLike) {

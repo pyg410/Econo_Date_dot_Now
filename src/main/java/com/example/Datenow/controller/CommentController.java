@@ -18,9 +18,9 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @Slf4j // 로깅에 대한 추상 레이어를 제공하는 인터페이스의 모음이다.
 public class CommentController {
-    @Autowired
-    CommentService commentService;
-
+    @Autowired private final CommentService commentService;
+    
+    // 댓글 생성
     @PostMapping("api/v1/comments/{postId}/{userId}")
     public ResponseEntity<CommentResponseDto> save(@Valid CommentRequestDto commentDTO,
                                                    // 해당 userId는 추후 jwt를 이용한 Principal로 변경하기
@@ -32,7 +32,9 @@ public class CommentController {
         return new ResponseEntity(CommentResponseDto.FromComment(comment), HttpStatus.CREATED);
     }
 
-    @PutMapping("api/v1/comments/update/{commentId}/{userId}")
+    
+    // 댓글 수정
+    @PutMapping("api/v1/comments/{commentId}/{userId}")
     public ResponseEntity<CommentResponseDto> update(@Valid CommentRequestDto commentDTO,
                                                    // 해당 userId는 추후 jwt를 이용한 Principal로 변경하기
                                                    @PathVariable(name = "commentId") Long commentId,
@@ -42,8 +44,10 @@ public class CommentController {
 
         return new ResponseEntity(CommentResponseDto.FromComment(comment), HttpStatus.OK);
     }
-
-    @DeleteMapping("api/v1/comments/delete/{commentId}/{userId}")
+    
+    
+    // 댓글 삭제
+    @DeleteMapping("api/v1/comments/{commentId}/{userId}")
     public ResponseEntity<CommentResponseDto> delete(@Valid CommentRequestDto commentDTO,
                                                      // 해당 userId는 추후 jwt를 이용한 Principal로 변경하기
                                                      @PathVariable(name = "commentId") Long commentId,
