@@ -1,6 +1,6 @@
 package com.example.Datenow.service;
 
-import com.example.Datenow.DTO.CommentResponseDto;
+import com.example.Datenow.DTO.CommentDto.CommentResponseDto;
 import com.example.Datenow.DTO.PostDto.PostLikeDto;
 import com.example.Datenow.DTO.PostDto.PostRequestDto;
 import com.example.Datenow.DTO.PostDto.PostResponseDto;
@@ -13,7 +13,6 @@ import com.example.Datenow.repository.PostRepository;
 import com.example.Datenow.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -134,7 +133,7 @@ public class PostService {
     }
 
     // 게시글 한개 반환
-    @Transactional(readOnly = true)
+    @Transactional
     public PostResponseDto findById(Long postId) {
         Optional<Post> optPost = Repository.findById(postId);
         Post post = optPost.get();
@@ -143,10 +142,13 @@ public class PostService {
 
         List<CommentResponseDto> commentDTOS = CommentResponseDto.FromCommentList(post.getCommentList());
 
+        int commentSize = post.getCommentList().size();
+
         return PostResponseDto.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
                 .category(post.getCategory())
+                .commentCnt(commentSize)
                 .viewCnt(post.getViewCnt())
                 .recommendCnt(post.getRecommendCnt())
                 .writer(post.getUser().getUsername())
@@ -213,4 +215,11 @@ public class PostService {
          */
         return Repository.findByCategory(category).stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
     }
+    
+    // 카테고리별 추천 게시글들
+    @Transactional(readOnly = true)
+    public List<PostResponseDto> findByCategoryOrderByRecommendCntDesc(Category category){
+        return Repository.findByCategoryOrderByRecommendCntDesc(category).stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
+    }
+
 }

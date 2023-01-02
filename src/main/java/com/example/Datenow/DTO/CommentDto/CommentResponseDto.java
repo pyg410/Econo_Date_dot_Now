@@ -1,8 +1,7 @@
-package com.example.Datenow.DTO;
+package com.example.Datenow.DTO.CommentDto;
 
 import com.example.Datenow.domain.Comment;
 import com.example.Datenow.domain.Post.Post;
-import com.example.Datenow.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,13 +15,14 @@ public class CommentResponseDto {
 
     private String content;
 
-    private Post post;
+    private String post;
 
     private String writer;
 
     public static CommentResponseDto FromComment(Comment comment) {
         return CommentResponseDto.builder()
                 .content(comment.getContent())
+                .post(comment.getPost().getTitle())
                 .writer(comment.getUser().getUsername())
                 .build();
     }

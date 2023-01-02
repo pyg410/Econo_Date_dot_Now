@@ -43,11 +43,16 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("select m from Post m where m.category = :category")
     List<Post> findByCategory(@Param("category") Category category);
 
-
+    // 카테고리별 추천 게시글들
+    List<Post> findByCategoryOrderByRecommendCntDesc(@Param("category") Category category);
+    
+    
     // 게시글 검색
     List<Post> findByTitleContaining(String keyword);
 
-
+    
+    
+    
 
     // 작성자별 게시글
 //    @Query("select m from Post m where m.username = :username")

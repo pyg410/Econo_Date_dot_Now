@@ -22,7 +22,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "TEXT", nullable = false) // 특정 필드의 타입을 지정하여 데이터를 추출
+    //@Column(columnDefinition = "TEXT") // 특정 필드의 타입을 지정하여 데이터를 추출
     private String content; // 댓글 내용
 
     @Column(name = "created_date")
@@ -55,4 +55,9 @@ public class Comment {
         post.mappingComment(this);
         user.mappingComment(this);
     }
+
+    public void changeContents(String contents) {
+        this.content = contents;
+    }
+
 }

@@ -1,6 +1,6 @@
 package com.example.Datenow.DTO.PostDto;
 
-import com.example.Datenow.DTO.CommentResponseDto;
+import com.example.Datenow.DTO.CommentDto.CommentResponseDto;
 import com.example.Datenow.domain.Category;
 import com.example.Datenow.domain.Post.Post;
 import lombok.*;
@@ -21,6 +21,7 @@ public class PostResponseDto {
     private Category category; // 카테고리
     private List<CommentResponseDto> comments; // 댓글들
     private List<HashMap<Double, Double>> map; // 위도, 경도
+    private int commentCnt;
     private int viewCnt;
     private int scrapCnt;
     private int recommendCnt;
@@ -47,6 +48,7 @@ public class PostResponseDto {
         return PostResponseDto.builder()
                 .title(post.getTitle())
                 .writer(post.getUser().getUsername())
+                .commentCnt(post.getCommentList().size())
                 .recommendCnt(post.getRecommendCnt())
                 .category(post.getCategory())
                 .createdDate(post.getCreatedDate())
@@ -61,6 +63,7 @@ public class PostResponseDto {
                 .content(post.getContent())
                 .writer(post.getUser().getUsername())
                 .comments(CommentResponseDto.FromCommentList(post.getCommentList()))
+                .commentCnt(post.getCommentList().size())
                 .viewCnt(post.getViewCnt())
                 .category(post.getCategory())
                 .createdDate(post.getCreatedDate())
@@ -74,6 +77,7 @@ public class PostResponseDto {
                 .content(post.getContent())
                 .createdDate(post.getCreatedDate())
                 .modifiedDate(post.getModifiedDate())
+                .commentCnt(post.getCommentList().size())
                 .build();
     }
 

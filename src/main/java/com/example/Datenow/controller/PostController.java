@@ -16,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
-
-
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -30,9 +28,11 @@ public class PostController {
     @Autowired PostService postService;
     @Autowired UserRepository userRepository;
 
-
+    /*
+        http method를 통해서 이 uri은 어떤 행위를 할지 표현이 가능하기 때문에, uri에는 명사로 어떤 자원인지만 표현
+    
+     */
     //===== GET =====//
-
     // 유저 생성
     @Operation(summary = "home", description = "home입니다.", tags = { "Post Controller" })
     @GetMapping("api/v1/home/{id}")
@@ -56,7 +56,7 @@ public class PostController {
     }
 
     // 게시글 하나 조회
-    @GetMapping("api/v1/post/{id}")
+    @GetMapping("api/v1/posts/{id}")
     public ResponseEntity<PostResponseDto> findById( @PathVariable(name = "id") Long postId) {
 
         PostResponseDto post = postService.findById(postId);
@@ -65,16 +65,15 @@ public class PostController {
     }
     
     // 게시글 추천순으로 조회
-    @GetMapping("api/v1/posts/get/recommend")
+    @GetMapping("api/v1/posts/recommend")
     public ResponseEntity<List<PostResponseDto>> findAllByOrderByRecommendCntDesc() {
         List<PostResponseDto> postList = postService.findAllByOrderByRecommendCntDesc();
 
         return new ResponseEntity(postList, HttpStatus.OK);
     }
 
-
     // 게시글 생성 최신순으로 조회
-    @GetMapping("api/v1/posts/get/new")
+    @GetMapping("api/v1/posts/new")
     public ResponseEntity<List<PostResponseDto>> findAllByOrderByCreatedDateDesc() {
         List<PostResponseDto> postList = postService.findAllByOrderByCreatedDateDesc();
 
@@ -83,7 +82,7 @@ public class PostController {
 
 
     // 게시글 생성 오래된순으로 조회
-    @GetMapping("api/v1/posts/get/old")
+    @GetMapping("api/v1/posts/old")
     public ResponseEntity<List<PostResponseDto>> findAllByOrderByCreatedDateAsc() {
         List<PostResponseDto> postList = postService.findAllByOrderByCreatedDateAsc();
 
@@ -91,7 +90,7 @@ public class PostController {
     }
     
     // 게시글 검색 제목에 맞게 조회
-    @GetMapping("api/v1/posts/get/title/{title}")
+    @GetMapping("api/v1/posts/title/{title}")
     public ResponseEntity<List<PostResponseDto>> findByTitleContaining(@PathVariable(name = "title") String postTitle) {
         List<PostResponseDto> postList = postService.findByTitleContaining(postTitle);
 
@@ -100,17 +99,25 @@ public class PostController {
 
 
     // 게시글 카테고리에 맞게 조회
-    @GetMapping("api/v1/posts/get/category/{category}")
+    @GetMapping("api/v1/posts/category/{category}")
     public ResponseEntity<List<PostResponseDto>> findByCategory(@PathVariable(name = "category") Category category) {
         List<PostResponseDto> postList = postService.findByCategory(category);
 
         return new ResponseEntity(postList, HttpStatus.OK);
     }
 
-    //===== POST =====//
+    // 게시글 카테고리에 맞게 조회하되 추천순으로 반환
+    @GetMapping("api/v1/posts/category-top/{category}")
+    public ResponseEntity<List<PostResponseDto>> findByCategoryOrderByRecommendCntDesc(@PathVariable(name = "category") Category category) {
+        List<PostResponseDto> postList = postService.findByCategoryOrderByRecommendCntDesc(category);
+
+        return new ResponseEntity(postList, HttpStatus.OK);
+    }
     
+     
+    //===== POST =====//
     // 게시글 생성
-    @PostMapping("api/v1/post/{id}")
+    @PostMapping("api/v1/posts/{id}")
     public ResponseEntity<PostCreateResponseDto> save(@Valid PostRequestDto postDTO,
                                                       // 해당 userId는 추후 jwt를 이용한 Principal로 변경하기
                                                       @PathVariable(name = "id") Long userId) {
@@ -121,7 +128,7 @@ public class PostController {
     }
 
     // 게시글 수정
-    @PutMapping("api/v1/post/{postId}/{userId}")
+    @PutMapping("api/v1/posts/{postId}/{userId}")
     public ResponseEntity<PostResponseDto> update(@Valid PostRequestDto postDTO,
                                                   // 해당 userId는 추후 jwt를 이용한 Principal로 변경하기
                                                   @PathVariable(name = "userId") Long userId,
@@ -133,7 +140,7 @@ public class PostController {
     }
     
     // 게시글 삭제
-    @DeleteMapping("api/v1/post/delete/{postId}/{userId}")
+    @DeleteMapping("api/v1/posts/{postId}/{userId}")
     public ResponseEntity<PostLikeDto> delete(// 해당 userId는 추후 jwt를 이용한 Principal로 변경하기
                                                 @PathVariable(name = "userId") Long userId,
                                                 @PathVariable(name = "postId") Long postId) {
@@ -143,7 +150,7 @@ public class PostController {
     }
 
     // 게시글 좋아요
-    @PostMapping("api/v1/post/like/{postId}/{userId}")
+    @PostMapping("api/v1/postlike/{postId}/{userId}")
     public ResponseEntity<PostLikeDto> postLike(// 해당 userId는 추후 jwt를 이용한 Principal로 변경하기
                                                 @PathVariable(name = "userId") Long userId,
                                                 @PathVariable(name = "postId") Long postId) {
@@ -152,7 +159,5 @@ public class PostController {
 
         return new ResponseEntity(post, HttpStatus.OK);
     }
-    
-    
-    
+
 }

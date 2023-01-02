@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import com.example.Datenow.DTO.CommentResponseDto;
 import com.example.Datenow.domain.Category;
 import com.example.Datenow.domain.Comment;
 import com.example.Datenow.domain.User;
@@ -112,5 +111,4 @@ public class Post{
     public void updateLikeCount() {
         this.recommendCnt = (int) this.postLikeList.size();
     }
-
 }
