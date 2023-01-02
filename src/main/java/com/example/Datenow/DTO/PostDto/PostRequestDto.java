@@ -1,4 +1,4 @@
-package com.example.Datenow.DTO;
+package com.example.Datenow.DTO.PostDto;
 
 import com.example.Datenow.domain.*;
 import com.example.Datenow.domain.Post.Post;

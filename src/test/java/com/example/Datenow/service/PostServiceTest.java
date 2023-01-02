@@ -1,8 +1,7 @@
 package com.example.Datenow.service;
 
-import com.example.Datenow.DTO.PostRequestDto;
-import com.example.Datenow.DTO.PostResponseDto;
-import com.example.Datenow.domain.Category;
+import com.example.Datenow.DTO.PostDto.PostRequestDto;
+import com.example.Datenow.DTO.PostDto.PostResponseDto;
 import com.example.Datenow.domain.Comment;
 import com.example.Datenow.domain.Post.Post;
 import com.example.Datenow.domain.Post.PostLike;

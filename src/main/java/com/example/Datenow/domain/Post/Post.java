@@ -14,9 +14,11 @@ import com.example.Datenow.domain.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 생성자를 통해서 값 변경 목적으로 접근하는 메시지들 차단
+@EntityListeners(AuditingEntityListener.class) // 이게 있어야 @CreatedDate 활성화
 @Entity
 public class Post{
 
@@ -40,7 +42,7 @@ public class Post{
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<PostLike> postLikeList = new ArrayList<>(); // 좋아요 리스트
 
-    @ElementCollection
+    @ElementCollection // 컬렉션 타입을 DB와 매핑하기 위한 어노테이션
     private List<HashMap<Double, Double>> postMapList = new ArrayList<>(); // 맵 위치 리스트
 
     private String imageUrl; // 이미지 경로
@@ -55,13 +57,15 @@ public class Post{
     private int recommendCnt; // 좋아요 수
 
     @CreatedDate
-    private LocalDateTime createdDate = LocalDateTime.now(); // 생성일
+    private LocalDateTime createdDate; // 생성일
 
     @LastModifiedDate
     private LocalDateTime modifiedDate; // 수정일
 
     @Builder
-    public Post(String title, String content, User user, Category category, List<Comment> commentList, List<HashMap<Double, Double>> postMapList, int viewCnt, int scrapCnt, int recommendCnt, String imageUrl) {
+    public Post(String title, String content, User user, Category category, List<Comment> commentList, List<HashMap<Double, Double>> postMapList,
+                int viewCnt, int scrapCnt, int recommendCnt, String imageUrl,
+                LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.title = title;
         this.content = content;
         this.user = user;
@@ -72,6 +76,8 @@ public class Post{
         this.scrapCnt = scrapCnt;
         this.recommendCnt = recommendCnt;
         this.imageUrl = imageUrl;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
     }
 
     public void changeTitle(String title) {

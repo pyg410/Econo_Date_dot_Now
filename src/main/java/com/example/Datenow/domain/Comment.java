@@ -4,6 +4,7 @@ import com.example.Datenow.domain.Post.Post;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 파라미터가 없는 기본 생성자를 생성
 @Getter
 @Table(name = "comments")
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Comment {
 

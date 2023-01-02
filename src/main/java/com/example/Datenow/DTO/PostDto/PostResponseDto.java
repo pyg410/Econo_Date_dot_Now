@@ -1,10 +1,11 @@
-package com.example.Datenow.DTO;
+package com.example.Datenow.DTO.PostDto;
 
+import com.example.Datenow.DTO.CommentResponseDto;
 import com.example.Datenow.domain.Category;
-import com.example.Datenow.domain.Comment;
 import com.example.Datenow.domain.Post.Post;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,6 +24,8 @@ public class PostResponseDto {
     private int viewCnt;
     private int scrapCnt;
     private int recommendCnt;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
 
     // entity -> dto
     // Controller에서 Response DTO 형태로 Client에 전달한다.
@@ -34,6 +37,8 @@ public class PostResponseDto {
                 .viewCnt(post.getViewCnt())
                 .scrapCnt(post.getScrapCnt())
                 .recommendCnt(post.getRecommendCnt())
+                .createdDate(post.getCreatedDate())
+                .modifiedDate(post.getModifiedDate())
                 .build();
     }
     
@@ -44,6 +49,8 @@ public class PostResponseDto {
                 .writer(post.getUser().getUsername())
                 .recommendCnt(post.getRecommendCnt())
                 .category(post.getCategory())
+                .createdDate(post.getCreatedDate())
+                .modifiedDate(post.getModifiedDate())
                 .build();
     }
 
@@ -56,6 +63,8 @@ public class PostResponseDto {
                 .comments(CommentResponseDto.FromCommentList(post.getCommentList()))
                 .viewCnt(post.getViewCnt())
                 .category(post.getCategory())
+                .createdDate(post.getCreatedDate())
+                .modifiedDate(post.getModifiedDate())
                 .build();
     }
 
@@ -63,7 +72,10 @@ public class PostResponseDto {
         return  PostResponseDto.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
+                .createdDate(post.getCreatedDate())
+                .modifiedDate(post.getModifiedDate())
                 .build();
     }
+
 }
 

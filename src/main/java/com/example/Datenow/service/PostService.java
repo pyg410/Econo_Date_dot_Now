@@ -1,8 +1,9 @@
 package com.example.Datenow.service;
 
 import com.example.Datenow.DTO.CommentResponseDto;
-import com.example.Datenow.DTO.PostRequestDto;
-import com.example.Datenow.DTO.PostResponseDto;
+import com.example.Datenow.DTO.PostDto.PostLikeDto;
+import com.example.Datenow.DTO.PostDto.PostRequestDto;
+import com.example.Datenow.DTO.PostDto.PostResponseDto;
 import com.example.Datenow.domain.Category;
 import com.example.Datenow.domain.Post.Post;
 import com.example.Datenow.domain.Post.PostLike;
@@ -72,7 +73,7 @@ public class PostService {
     
     // 게시글 수정
     @Transactional
-    public PostResponseDto updatePost(Long postId, PostRequestDto postDTO, Long userId) {
+    public Post updatePost(Long postId, PostRequestDto postDTO, Long userId) {
         Post post = getPostInService(postId);
         
         // 만약 글 작성자와 현 유저의 id가 같다면
@@ -81,7 +82,7 @@ public class PostService {
             post.changeTitle(postDTO.getTitle());
             post.changeContents(postDTO.getContent());
             // 수정하고, 수정한 Post를 반환해라
-            return PostResponseDto.fromDetailPost(post);
+            return post;
 
         } else {
             throw new IllegalStateException("권한이 없습니다.");
@@ -103,7 +104,7 @@ public class PostService {
 
     // 게시글 좋아요
     @Transactional
-    public void postLike(Long postId, Long userId) {
+    public PostLikeDto postLike(Long postId, Long userId) {
         Post post = getPostInService(postId);
         Optional<User> optUser = userRepository.findById(userId);
         User user = optUser.get();
@@ -116,6 +117,7 @@ public class PostService {
                 postLike -> {
                     postLikeRepository.delete(postLike);
                     post.discountLike(postLike);
+                    post.updateLikeCount();
                 },
                 () -> {
                     // PostLike 객체가 없다면 == 좋아요를 누르지않았다면 PostLike 객체를 만들어주고,
@@ -128,6 +130,7 @@ public class PostService {
                     postLikeRepository.save(postLike);
                 }
         );
+        return PostLikeDto.fromLikePost(post);
     }
 
     // 게시글 한개 반환
@@ -150,6 +153,8 @@ public class PostService {
                 .map(post.getPostMapList())
                 .scrapCnt(post.getScrapCnt())
                 .comments(commentDTOS)
+                .createdDate(post.getCreatedDate())
+                .modifiedDate(post.getModifiedDate())
                 .build();
     }
     
