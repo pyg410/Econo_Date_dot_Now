@@ -15,7 +15,12 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Getter @Setter
+/*
+@NoArgsConstructor 어노테이션은 파라미터가 없는 기본 생성자를 생성해주고,
+@AllArgsConstructor 어노테이션은 모든 필드 값을 파라미터로 받는 생성자를 만들어줍니다.
+마지막으로 @RequiredArgsConstructor 어노테이션은 final이나 @NonNull인 필드 값만 파라미터로 받는 생성자를 만들어줍니다.
+ */
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 생성자를 통해서 값 변경 목적으로 접근하는 메시지들 차단
 @EntityListeners(AuditingEntityListener.class) // 이게 있어야 @CreatedDate 활성화
 @Entity
@@ -41,8 +46,8 @@ public class Post{
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<PostLike> postLikeList = new ArrayList<>(); // 좋아요 리스트
 
-    @ElementCollection // 컬렉션 타입을 DB와 매핑하기 위한 어노테이션
-    private List<HashMap<Double, Double>> postMapList = new ArrayList<>(); // 맵 위치 리스트
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<PostMap> postMapList = new ArrayList<>(); // Map 리스트
 
     private String imageUrl; // 이미지 경로
 
@@ -60,7 +65,7 @@ public class Post{
     private LocalDateTime modifiedDate; // 수정일
 
     @Builder
-    public Post(String title, String content, User user, Category category, List<Comment> commentList, List<HashMap<Double, Double>> postMapList,
+    public Post(String title, String content, User user, Category category, List<Comment> commentList, List<PostMap> postMapList,
                 int viewCnt, int recommendCnt, String imageUrl,
                 LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.title = title;
@@ -94,6 +99,10 @@ public class Post{
     public void mappingUser(User user) {
         this.user = user;
         user.mappingPost(this);
+    }
+
+    public void mappingPostMap(PostMap postmap) {
+        this.postMapList.add(postmap);
     }
 
     public void mappingComment(Comment comment) {

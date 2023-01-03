@@ -2,6 +2,7 @@ package com.example.Datenow.service;
 
 import com.example.Datenow.DTO.CommentDto.CommentResponseDto;
 import com.example.Datenow.DTO.PostDto.PostLikeDto;
+import com.example.Datenow.DTO.PostDto.PostMapResponseDto;
 import com.example.Datenow.DTO.PostDto.PostRequestDto;
 import com.example.Datenow.DTO.PostDto.PostResponseDto;
 import com.example.Datenow.domain.Category;
@@ -50,11 +51,13 @@ public class PostService {
         User user = optUser.get();
 
         // Map
-        HashMap<Double, Double> map = new HashMap<>();
-        map.put(postDTO.getLat(), postDTO.getLng());
+//        HashMap<Double, Double> map = new HashMap<>();
+//        map.put(postDTO.getLat(), postDTO.getLng());
 
-        List<HashMap<Double, Double>> mapArray = new ArrayList<>();
-        mapArray.add(map);
+//        List<HashMap<Double, Double>> mapArray = new ArrayList<>();
+//        mapArray.add(map);
+
+
 
         // image
         if (multipartFile == null) {
@@ -67,7 +70,7 @@ public class PostService {
                 .content(postDTO.getContent())
                 .user(user)
                 .category(postDTO.getCategory())
-                .postMapList(mapArray)
+                //.postMapList(mapArray)
                 .viewCnt(0)
                 .recommendCnt(0)
                 .imageUrl(imageUrl)
@@ -162,6 +165,7 @@ public class PostService {
         post.addViewCount();
 
         List<CommentResponseDto> commentDTOS = CommentResponseDto.FromCommentList(post.getCommentList());
+        List<PostMapResponseDto> postMapDTOS = PostMapResponseDto.fromPostMapList(post.getPostMapList());
 
         int commentSize = post.getCommentList().size();
 
@@ -171,10 +175,10 @@ public class PostService {
                 .imageUrl(post.getImageUrl())
                 .category(post.getCategory())
                 .commentCnt(commentSize)
+                .map(postMapDTOS)
                 .viewCnt(post.getViewCnt())
                 .recommendCnt(post.getRecommendCnt())
                 .writer(post.getUser().getUsername())
-                .map(post.getPostMapList())
                 .comments(commentDTOS)
                 .createdDate(post.getCreatedDate())
                 .modifiedDate(post.getModifiedDate())

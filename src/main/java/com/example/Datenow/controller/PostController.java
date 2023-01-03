@@ -30,8 +30,8 @@ import java.util.Optional;
 @Slf4j // 로깅에 대한 추상 레이어를 제공하는 인터페이스의 모음이다.
 public class PostController {
 
-    @Autowired PostService postService;
-    @Autowired UserRepository userRepository;
+    @Autowired private final PostService postService;
+    @Autowired private final UserRepository userRepository;
 
 
     /*
@@ -67,7 +67,7 @@ public class PostController {
 
         PostResponseDto post = postService.findById(postId);
 
-        return new ResponseEntity<>(post, HttpStatus.OK);
+        return new ResponseEntity(post, HttpStatus.OK);
     }
     
     // 게시글 추천순으로 조회

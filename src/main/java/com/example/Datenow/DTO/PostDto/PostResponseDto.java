@@ -3,6 +3,7 @@ package com.example.Datenow.DTO.PostDto;
 import com.example.Datenow.DTO.CommentDto.CommentResponseDto;
 import com.example.Datenow.domain.Category;
 import com.example.Datenow.domain.Post.Post;
+import com.example.Datenow.domain.Post.PostMap;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -21,7 +22,7 @@ public class PostResponseDto {
     private String imageUrl; // 이미지 경로
     private Category category; // 카테고리
     private List<CommentResponseDto> comments; // 댓글들
-    private List<HashMap<Double, Double>> map; // 위도, 경도
+    private List<PostMapResponseDto> map; // 위도, 경도
     private int commentCnt;
     private int viewCnt;
     private int recommendCnt;
@@ -34,7 +35,7 @@ public class PostResponseDto {
         return PostResponseDto.builder()
                 .writer(post.getUser().getUsername()) //String으로 반환하기
                 .category(post.getCategory())
-                .map(post.getPostMapList())
+                .map(PostMapResponseDto.fromPostMapList(post.getPostMapList()))
                 .imageUrl(post.getImageUrl())
                 .viewCnt(post.getViewCnt())
                 .recommendCnt(post.getRecommendCnt())

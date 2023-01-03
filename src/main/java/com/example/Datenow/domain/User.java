@@ -3,6 +3,7 @@ package com.example.Datenow.domain;
 import com.example.Datenow.domain.Comment;
 import com.example.Datenow.domain.Post.Post;
 import com.example.Datenow.domain.Post.PostLike;
+import com.example.Datenow.domain.Post.PostMap;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,6 +31,8 @@ public class User  {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<PostLike> postLikeList = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<PostMap> postMapList = new ArrayList<>(); // Map 리스트
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //    public void encryptPassword(String password) {
@@ -49,6 +52,9 @@ public class User  {
         this.postLikeList.add(postLike);
     }
 
+    public void mappingPostMap(PostMap postMap) {
+        this.postMapList.add(postMap);
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //    @Override

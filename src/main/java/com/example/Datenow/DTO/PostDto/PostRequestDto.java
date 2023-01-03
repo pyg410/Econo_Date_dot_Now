@@ -2,6 +2,7 @@ package com.example.Datenow.DTO.PostDto;
 
 import com.example.Datenow.domain.*;
 import com.example.Datenow.domain.Post.Post;
+import com.example.Datenow.domain.Post.PostMap;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,17 +19,14 @@ import java.util.List;
 public class PostRequestDto {
 
     private String title; // 제목
-    private String content; // 내용
 
+    private String content; // 내용
+    
     private User writer; // 작성자
 
-    private Category category;
+    private Category category; // 카테고리
 
-    private Double lat;
-
-    private Double lng;
-
-    private List<HashMap<Double, Double>> map;
+    private List<PostMap> map;
 
     private String imageUrl;
 
@@ -41,7 +39,7 @@ public class PostRequestDto {
                 .content(content)
                 .user(writer)
                 .category(category)
-                .postMapList(map)
+                .postMapList(map) // 아마 DTO로 입력을 같이 받는게 아니라 별도의 Uri로 입력 받아야 하지 않을까??
                 .viewCnt(0)
                 .recommendCnt(0)
                 .imageUrl(imageUrl)
