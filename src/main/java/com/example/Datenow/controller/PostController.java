@@ -127,8 +127,10 @@ public class PostController {
     // 예외 던지기 = throws -> 이 메서드는 Exception1, Exception2....ExceptionN와 같은 Exception이 발생할 수 있으니,
     // 이 메서드를 호출하고자 하는 메서드에서는  Exception1, Exception2....ExceptionN을 처리 해주어야 한다는 뜻이다.
     // 자신을 호출한 메서드에 예외를 전가시키는 것.
-    @PostMapping("api/v1/posts/{id}")                                                // @RequestPart("image")은 API 요청시 JSON을 해당 인자 이름으로 넘기면 된다.
-    public ResponseEntity<PostCreateResponseDto> save(@Valid PostRequestDto postDTO, @RequestPart("image") MultipartFile multipartFile,
+    @PostMapping("api/v1/posts/{id}")
+    public ResponseEntity<PostCreateResponseDto> save(@Valid PostRequestDto postDTO,
+                                                      // @RequestPart("image")은 API 요청시 JSON을 해당 인자 이름으로 넘기면 된다.
+                                                      @RequestPart(value ="image") MultipartFile multipartFile,
                                                       // 해당 userId는 추후 jwt를 이용한 Principal로 변경하기
                                                       @PathVariable(name = "id") Long userId) throws IOException {
 
@@ -140,11 +142,13 @@ public class PostController {
     // 게시글 수정
     @PutMapping("api/v1/posts/{postId}/{userId}")
     public ResponseEntity<PostResponseDto> update(@Valid PostRequestDto postDTO,
+                                                  // required=false는 보내지않아도 에러를 일으키지 않는다.
+                                                  @RequestPart(value ="image", required = false) MultipartFile multipartFile,
                                                   // 해당 userId는 추후 jwt를 이용한 Principal로 변경하기
                                                   @PathVariable(name = "userId") Long userId,
-                                                  @PathVariable(name = "postId") Long postId) {
+                                                  @PathVariable(name = "postId") Long postId) throws IOException {
 
-        Post post = postService.updatePost(postId, postDTO, userId);
+        Post post = postService.updatePost(postId, postDTO, multipartFile, userId);
 
         return new ResponseEntity(PostResponseDto.fromUpdatePost(post), HttpStatus.OK);
     }

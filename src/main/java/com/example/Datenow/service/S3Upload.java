@@ -1,6 +1,7 @@
 package com.example.Datenow.service;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,5 +34,9 @@ public class S3Upload {
 
         // getUrl 메소드를 통해서 S3에 업로드된 사진 URL을 가져오는 방식입니다.
         return amazonS3.getUrl(bucket, s3FileName).toString();
+    }
+
+    public void deleteFile(String fileName) {
+        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 }

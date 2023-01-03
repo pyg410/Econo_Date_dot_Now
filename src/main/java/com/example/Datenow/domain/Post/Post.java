@@ -80,6 +80,9 @@ public class Post{
         this.title = title;
     }
 
+    public void changeImageUrl(String url) {
+        this.imageUrl = url;
+    }
     public void changeContents(String contents) {
         this.content = contents;
     }

@@ -82,14 +82,22 @@ public class PostService {
     
     // 게시글 수정
     @Transactional
-    public Post updatePost(Long postId, PostRequestDto postDTO, Long userId) {
+    public Post updatePost(Long postId, PostRequestDto postDTO, MultipartFile multipartFile, Long userId) throws IOException {
         Post post = getPostInService(postId);
         
         // 만약 글 작성자와 현 유저의 id가 같다면
         if (post.getUser().getId().equals(userId)) {
             // 글의 제목과 내용을 입력받은대로 수정해라
-            post.changeTitle(postDTO.getTitle());
-            post.changeContents(postDTO.getContent());
+            if (postDTO.getTitle() != null) {
+                post.changeTitle(postDTO.getTitle());
+            }
+            if (postDTO.getContent() != null) {
+                post.changeContents(postDTO.getContent());
+            }
+            // S3의 이미지 주소를 교체하라
+            if (multipartFile != null) {
+                post.changeImageUrl(s3Upload.upload(multipartFile));
+            }
             // 수정하고, 수정한 Post를 반환해라
             return post;
 
@@ -105,6 +113,9 @@ public class PostService {
         Post post = optPost.get();
 
         if (post.getUser().getId().equals(userId)) {
+            // S3 이미지와 게시글 모두 삭제
+            String uri = post.getImageUrl();
+            s3Upload.deleteFile(uri);
             Repository.delete(post);
         } else {
             throw new IllegalStateException("권한이 없습니다.");
