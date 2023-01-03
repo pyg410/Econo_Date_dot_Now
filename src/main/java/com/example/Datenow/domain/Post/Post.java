@@ -51,8 +51,6 @@ public class Post{
 
     private int viewCnt; // 조회 수
 
-    private int scrapCnt; // 스크랩 수
-
     private int recommendCnt; // 좋아요 수
 
     @CreatedDate
@@ -63,7 +61,7 @@ public class Post{
 
     @Builder
     public Post(String title, String content, User user, Category category, List<Comment> commentList, List<HashMap<Double, Double>> postMapList,
-                int viewCnt, int scrapCnt, int recommendCnt, String imageUrl,
+                int viewCnt, int recommendCnt, String imageUrl,
                 LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.title = title;
         this.content = content;
@@ -72,7 +70,6 @@ public class Post{
         this.postMapList = postMapList;
         this.commentList = commentList;
         this.viewCnt = viewCnt;
-        this.scrapCnt = scrapCnt;
         this.recommendCnt = recommendCnt;
         this.imageUrl = imageUrl;
         this.createdDate = createdDate;

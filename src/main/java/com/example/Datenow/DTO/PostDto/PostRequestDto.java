@@ -43,7 +43,6 @@ public class PostRequestDto {
                 .category(category)
                 .postMapList(map)
                 .viewCnt(0)
-                .scrapCnt(0)
                 .recommendCnt(0)
                 .imageUrl(imageUrl)
                 .build();

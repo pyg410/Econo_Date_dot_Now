@@ -18,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,27 +33,34 @@ import java.util.stream.Collectors;
 public class PostService {
 
     // 본인 엔티티 Repository는 그냥 Repository라 네이밍한다.
-    @Autowired
-    private final PostRepository Repository;
+    @Autowired private final PostRepository Repository;
 
-    @Autowired
-    private final PostLikeRepository postLikeRepository;
+    @Autowired private final PostLikeRepository postLikeRepository;
 
-    @Autowired
-    private final UserRepository userRepository;
+    @Autowired private final UserRepository userRepository;
+
+    @Autowired private final S3Upload s3Upload;
 
     // 게시글 생성
     @Transactional
-    public Post save(PostRequestDto postDTO, Long userId) {
+    public Post save(PostRequestDto postDTO, MultipartFile multipartFile, Long userId) throws IOException {
 
+        // User
         Optional<User> optUser = userRepository.findById(userId);
         User user = optUser.get();
 
+        // Map
         HashMap<Double, Double> map = new HashMap<>();
         map.put(postDTO.getLat(), postDTO.getLng());
 
         List<HashMap<Double, Double>> mapArray = new ArrayList<>();
         mapArray.add(map);
+
+        // image
+        if (multipartFile == null) {
+            throw new IOException();
+        }
+        String imageUrl = s3Upload.upload(multipartFile);
 
         Post post = Post.builder()
                 .title(postDTO.getTitle())
@@ -59,9 +69,8 @@ public class PostService {
                 .category(postDTO.getCategory())
                 .postMapList(mapArray)
                 .viewCnt(0)
-                .scrapCnt(0)
                 .recommendCnt(0)
-                .imageUrl(postDTO.getImageUrl())
+                .imageUrl(imageUrl)
                 .build();
 
         post.mappingUser(user);
@@ -148,13 +157,13 @@ public class PostService {
         return PostResponseDto.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
+                .imageUrl(post.getImageUrl())
                 .category(post.getCategory())
                 .commentCnt(commentSize)
                 .viewCnt(post.getViewCnt())
                 .recommendCnt(post.getRecommendCnt())
                 .writer(post.getUser().getUsername())
                 .map(post.getPostMapList())
-                .scrapCnt(post.getScrapCnt())
                 .comments(commentDTOS)
                 .createdDate(post.getCreatedDate())
                 .modifiedDate(post.getModifiedDate())

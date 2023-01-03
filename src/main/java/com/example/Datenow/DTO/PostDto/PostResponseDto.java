@@ -18,12 +18,12 @@ public class PostResponseDto {
     private String title; // 제목
     private String content; // 내용
     private String writer; // 작성자
+    private String imageUrl; // 이미지 경로
     private Category category; // 카테고리
     private List<CommentResponseDto> comments; // 댓글들
     private List<HashMap<Double, Double>> map; // 위도, 경도
     private int commentCnt;
     private int viewCnt;
-    private int scrapCnt;
     private int recommendCnt;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
@@ -35,8 +35,8 @@ public class PostResponseDto {
                 .writer(post.getUser().getUsername()) //String으로 반환하기
                 .category(post.getCategory())
                 .map(post.getPostMapList())
+                .imageUrl(post.getImageUrl())
                 .viewCnt(post.getViewCnt())
-                .scrapCnt(post.getScrapCnt())
                 .recommendCnt(post.getRecommendCnt())
                 .createdDate(post.getCreatedDate())
                 .modifiedDate(post.getModifiedDate())
@@ -48,7 +48,9 @@ public class PostResponseDto {
         return PostResponseDto.builder()
                 .title(post.getTitle())
                 .writer(post.getUser().getUsername())
+                .imageUrl(post.getImageUrl())
                 .commentCnt(post.getCommentList().size())
+                .viewCnt(post.getViewCnt())
                 .recommendCnt(post.getRecommendCnt())
                 .category(post.getCategory())
                 .createdDate(post.getCreatedDate())
@@ -62,6 +64,7 @@ public class PostResponseDto {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .writer(post.getUser().getUsername())
+                .imageUrl(post.getImageUrl())
                 .comments(CommentResponseDto.FromCommentList(post.getCommentList()))
                 .commentCnt(post.getCommentList().size())
                 .viewCnt(post.getViewCnt())
@@ -75,6 +78,7 @@ public class PostResponseDto {
         return  PostResponseDto.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
+                .imageUrl(post.getImageUrl())
                 .createdDate(post.getCreatedDate())
                 .modifiedDate(post.getModifiedDate())
                 .commentCnt(post.getCommentList().size())

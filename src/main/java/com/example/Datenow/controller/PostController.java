@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +32,7 @@ public class PostController {
 
     @Autowired PostService postService;
     @Autowired UserRepository userRepository;
+
 
     /*
         http method를 통해서 이 uri은 어떤 행위를 할지 표현이 가능하기 때문에, uri에는 명사로 어떤 자원인지만 표현
@@ -119,12 +123,16 @@ public class PostController {
      
     //===== POST =====//
     // 게시글 생성
-    @PostMapping("api/v1/posts/{id}")
-    public ResponseEntity<PostCreateResponseDto> save(@Valid PostRequestDto postDTO,
-                                                      // 해당 userId는 추후 jwt를 이용한 Principal로 변경하기
-                                                      @PathVariable(name = "id") Long userId) {
 
-        Post post = postService.save(postDTO, userId);
+    // 예외 던지기 = throws -> 이 메서드는 Exception1, Exception2....ExceptionN와 같은 Exception이 발생할 수 있으니,
+    // 이 메서드를 호출하고자 하는 메서드에서는  Exception1, Exception2....ExceptionN을 처리 해주어야 한다는 뜻이다.
+    // 자신을 호출한 메서드에 예외를 전가시키는 것.
+    @PostMapping("api/v1/posts/{id}")                                                // @RequestPart("image")은 API 요청시 JSON을 해당 인자 이름으로 넘기면 된다.
+    public ResponseEntity<PostCreateResponseDto> save(@Valid PostRequestDto postDTO, @RequestPart("image") MultipartFile multipartFile,
+                                                      // 해당 userId는 추후 jwt를 이용한 Principal로 변경하기
+                                                      @PathVariable(name = "id") Long userId) throws IOException {
+
+        Post post = postService.save(postDTO, multipartFile, userId);
 
         return new ResponseEntity(PostCreateResponseDto.fromCreatePost(post), HttpStatus.CREATED);
     }
