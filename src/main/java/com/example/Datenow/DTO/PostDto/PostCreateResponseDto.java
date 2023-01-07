@@ -13,14 +13,14 @@ public class PostCreateResponseDto {
     private String title;
     private String content;
     private String imageUrl;
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
 
     public static PostCreateResponseDto fromCreatePost(Post post){
         return PostCreateResponseDto.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
-                .createdDate(post.getCreatedDate())
+                .createdAt(post.getCreatedAt())
                 .imageUrl(post.getImageUrl())
                 .build();
     }

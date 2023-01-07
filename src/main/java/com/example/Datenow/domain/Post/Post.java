@@ -10,6 +10,7 @@ import javax.persistence.*;
 import com.example.Datenow.domain.Category;
 import com.example.Datenow.domain.Comment;
 import com.example.Datenow.domain.User;
+import com.example.Datenow.domain.common.Date;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -24,7 +25,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 생성자를 통해서 값 변경 목적으로 접근하는 메시지들 차단
 @EntityListeners(AuditingEntityListener.class) // 이게 있어야 @CreatedDate 활성화
 @Entity
-public class Post{
+public class Post extends Date {
 
     @Id
     @Column(name = "post_id") // 엔티티는 타입(ex:Member)가 있으므로, id 필드만으로 구별이 쉽지만, DB의 경우 타입이 없기에 id라고 이름을 지으면 구별하기 어렵다.
@@ -58,11 +59,11 @@ public class Post{
 
     private int recommendCnt; // 좋아요 수
 
-    @CreatedDate
-    private LocalDateTime createdDate; // 생성일
-
-    @LastModifiedDate
-    private LocalDateTime modifiedDate; // 수정일
+//    @CreatedDate
+//    private LocalDateTime createdDate; // 생성일
+//
+//    @LastModifiedDate
+//    private LocalDateTime modifiedDate; // 수정일
 
     @Builder
     public Post(String title, String content, User user, Category category, List<Comment> commentList, List<PostMap> postMapList,
@@ -77,8 +78,8 @@ public class Post{
         this.viewCnt = viewCnt;
         this.recommendCnt = recommendCnt;
         this.imageUrl = imageUrl;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
+//        this.createdDate = createdDate;
+//        this.modifiedDate = modifiedDate;
     }
 
     public void changeTitle(String title) {

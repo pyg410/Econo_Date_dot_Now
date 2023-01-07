@@ -1,6 +1,7 @@
 package com.example.Datenow.domain;
 
 import com.example.Datenow.domain.Post.Post;
+import com.example.Datenow.domain.common.Date;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -11,12 +12,12 @@ import javax.persistence.Table;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // 파라미터가 없는 기본 생성자를 생성
+@NoArgsConstructor(access = AccessLevel.PROTECTED) // 파라미터가 없는 기본 생성자를 생성 -> 생성자를 통한 값 변경 방해
 @Getter
 @Table(name = "comments")
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Comment {
+public class Comment extends Date {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,14 +25,6 @@ public class Comment {
 
     //@Column(columnDefinition = "TEXT") // 특정 필드의 타입을 지정하여 데이터를 추출
     private String content; // 댓글 내용
-
-    @Column(name = "created_date")
-    @CreatedDate
-    private LocalDateTime createdDate; // 댓글 작성 날짜
-
-    @Column(name = "modified_date")
-    @LastModifiedDate
-    private LocalDateTime modifiedDate; // 댓글 수정 날짜
 
     @ManyToOne
     @JoinColumn(name = "posts_id")

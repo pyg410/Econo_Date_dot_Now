@@ -180,8 +180,8 @@ public class PostService {
                 .recommendCnt(post.getRecommendCnt())
                 .writer(post.getUser().getUsername())
                 .comments(commentDTOS)
-                .createdDate(post.getCreatedDate())
-                .modifiedDate(post.getModifiedDate())
+                .createdDate(post.getCreatedAt())
+                .modifiedDate(post.getUpdatedAt())
                 .build();
     }
     
@@ -220,7 +220,7 @@ public class PostService {
         /*
         Post 자료형을 가진 스트림 내 요소들을 PostResponseDto.FromManyPost 맞게 바꿔준 후 하나의 리스트로 만들어준다.
          */
-        return Repository.findAllByOrderByCreatedDateDesc(pageable).stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
+        return Repository.findAllByOrderByCreatedAtDesc(pageable).stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
     }
 
     // 게시글 오래된순 반환
@@ -229,7 +229,7 @@ public class PostService {
         /*
         Post 자료형을 가진 스트림 내 요소들을 PostResponseDto.FromManyPost 맞게 바꿔준 후 하나의 리스트로 만들어준다.
          */
-        return Repository.findAllByOrderByCreatedDateAsc(pageable).stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
+        return Repository.findAllByOrderByCreatedAtAsc(pageable).stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
     }
     
     // 카테코리별 게시글

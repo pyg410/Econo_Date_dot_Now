@@ -5,6 +5,7 @@ import com.example.Datenow.domain.Post.Post;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,11 +20,17 @@ public class CommentResponseDto {
 
     private String writer;
 
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
     public static CommentResponseDto FromComment(Comment comment) {
         return CommentResponseDto.builder()
                 .content(comment.getContent())
                 .post(comment.getPost().getTitle())
                 .writer(comment.getUser().getUsername())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
                 .build();
     }
 
@@ -37,7 +44,7 @@ public class CommentResponseDto {
         // collect()는 Stream의 데이터를 변형 등의 처리를 하고 원하는 자료형으로 변환해 줍니다.
 
         /*
-        즉 CommentResponseDto 자료형을 가진 스트림 내 요소들을 FromComment에 맞게 바꿔준 후 하나의 리스트로 만들어준다.
+        즉 List<Comment> 자료형을 가진 스트림 내 요소들을 FromComment에 맞게 바꿔준 후 List<CommentResponseDto> 자료형의 하나의 리스트로 만들어준다.
          */
         return stream.map(CommentResponseDto::FromComment).collect(Collectors.toList());
     }

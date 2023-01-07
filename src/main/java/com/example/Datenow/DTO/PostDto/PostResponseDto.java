@@ -26,8 +26,8 @@ public class PostResponseDto {
     private int commentCnt;
     private int viewCnt;
     private int recommendCnt;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 
     // entity -> dto
     // Controller에서 Response DTO 형태로 Client에 전달한다.
@@ -39,8 +39,8 @@ public class PostResponseDto {
                 .imageUrl(post.getImageUrl())
                 .viewCnt(post.getViewCnt())
                 .recommendCnt(post.getRecommendCnt())
-                .createdDate(post.getCreatedDate())
-                .modifiedDate(post.getModifiedDate())
+                .createdAt(post.getCreatedAt())
+                .modifiedAt(post.getUpdatedAt())
                 .build();
     }
     
@@ -54,8 +54,8 @@ public class PostResponseDto {
                 .viewCnt(post.getViewCnt())
                 .recommendCnt(post.getRecommendCnt())
                 .category(post.getCategory())
-                .createdDate(post.getCreatedDate())
-                .modifiedDate(post.getModifiedDate())
+                .createdAt(post.getCreatedAt())
+                .modifiedAt(post.getUpdatedAt())
                 .build();
     }
 
@@ -70,8 +70,8 @@ public class PostResponseDto {
                 .commentCnt(post.getCommentList().size())
                 .viewCnt(post.getViewCnt())
                 .category(post.getCategory())
-                .createdDate(post.getCreatedDate())
-                .modifiedDate(post.getModifiedDate())
+                .createdAt(post.getCreatedAt())
+                .modifiedAt(post.getUpdatedAt())
                 .build();
     }
 
@@ -80,8 +80,8 @@ public class PostResponseDto {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .imageUrl(post.getImageUrl())
-                .createdDate(post.getCreatedDate())
-                .modifiedDate(post.getModifiedDate())
+                .createdAt(post.getCreatedAt())
+                .modifiedAt(post.getUpdatedAt())
                 .commentCnt(post.getCommentList().size())
                 .build();
     }
