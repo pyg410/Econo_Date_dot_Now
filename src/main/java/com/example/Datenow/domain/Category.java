@@ -1,5 +1,10 @@
 package com.example.Datenow.domain;
 
 public enum Category {
-    실내데이트, 실외데이트, 겨울데이트, 여름데이트
+    맛집탐방,
+    쇼핑,
+    힐링실내,
+    힐링실외, 
+    스포츠,
+    테마파크
 }

@@ -24,6 +24,9 @@ public class PostRequestDto {
     
     private User writer; // 작성자
 
+    
+    private String hashTag; // 해시태그
+
     private Category category; // 카테고리
 
     private List<PostMap> map;

@@ -120,6 +120,12 @@ public class PostController {
         return new ResponseEntity(postList, HttpStatus.OK);
     }
     
+    // 카테고리 반환
+    @GetMapping("api/v1/categorys")
+    public ResponseEntity<List<Category>> findCategorys() {
+        List<Category> categorys= postService.findCategorys();
+        return new ResponseEntity(categorys, HttpStatus.OK);
+    }
      
     //===== POST =====//
     // 게시글 생성

@@ -1,10 +1,8 @@
 package com.example.Datenow.domain.Post;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
+import java.util.List;
 import javax.persistence.*;
 
 import com.example.Datenow.domain.Category;
@@ -12,8 +10,6 @@ import com.example.Datenow.domain.Comment;
 import com.example.Datenow.domain.User;
 import com.example.Datenow.domain.common.Date;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /*
@@ -36,6 +32,8 @@ public class Post extends Date {
 
     private String content; // 내용
 
+    private String hashTag; // 해시태그
+    
     @ManyToOne(fetch = FetchType.LAZY) // FetchType.Lazy는 JPA의 프록시와 지연로딩의 기초적인 내용을 공부해야한다.
     @JoinColumn(name = "user_id") // FK이름 지정
     private User user; // User 객체 자체를 저장받고, 반환할 때는 Post에 저장된 USER.getUsername 반환
@@ -48,7 +46,7 @@ public class Post extends Date {
     private List<PostLike> postLikeList = new ArrayList<>(); // 좋아요 리스트
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
-    private List<PostMap> postMapList = new ArrayList<>(); // Map 리스트
+    private List<PostMap> postMapList = new ArrayList<>(); // postMap 리스트
 
     private String imageUrl; // 이미지 경로
 
@@ -59,18 +57,13 @@ public class Post extends Date {
 
     private int recommendCnt; // 좋아요 수
 
-//    @CreatedDate
-//    private LocalDateTime createdDate; // 생성일
-//
-//    @LastModifiedDate
-//    private LocalDateTime modifiedDate; // 수정일
-
     @Builder
-    public Post(String title, String content, User user, Category category, List<Comment> commentList, List<PostMap> postMapList,
-                int viewCnt, int recommendCnt, String imageUrl,
-                LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public Post(String title, String content, String hashTag, User user, Category category, List<Comment> commentList, List<PostMap> postMapList,
+                int viewCnt, int recommendCnt, String imageUrl
+                ) {
         this.title = title;
         this.content = content;
+        this.hashTag = hashTag;
         this.user = user;
         this.category = category;
         this.postMapList = postMapList;
@@ -78,8 +71,6 @@ public class Post extends Date {
         this.viewCnt = viewCnt;
         this.recommendCnt = recommendCnt;
         this.imageUrl = imageUrl;
-//        this.createdDate = createdDate;
-//        this.modifiedDate = modifiedDate;
     }
 
     public void changeTitle(String title) {
@@ -105,6 +96,7 @@ public class Post extends Date {
     public void mappingPostMap(PostMap postmap) {
         this.postMapList.add(postmap);
     }
+
 
     public void mappingComment(Comment comment) {
         this.commentList.add(comment);

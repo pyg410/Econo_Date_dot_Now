@@ -18,6 +18,7 @@ import java.util.List;
 public class PostResponseDto {
     private String title; // 제목
     private String content; // 내용
+    private String hashTag; // 해시태그
     private String writer; // 작성자
     private String imageUrl; // 이미지 경로
     private Category category; // 카테고리
@@ -49,6 +50,8 @@ public class PostResponseDto {
         return PostResponseDto.builder()
                 .title(post.getTitle())
                 .writer(post.getUser().getUsername())
+                .content(post.getContent())
+                .hashTag(post.getHashTag())
                 .imageUrl(post.getImageUrl())
                 .commentCnt(post.getCommentList().size())
                 .viewCnt(post.getViewCnt())
@@ -64,6 +67,7 @@ public class PostResponseDto {
         return PostResponseDto.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
+                .hashTag(post.getHashTag())
                 .writer(post.getUser().getUsername())
                 .imageUrl(post.getImageUrl())
                 .comments(CommentResponseDto.FromCommentList(post.getCommentList()))

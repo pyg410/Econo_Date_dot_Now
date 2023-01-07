@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -180,8 +181,8 @@ public class PostService {
                 .recommendCnt(post.getRecommendCnt())
                 .writer(post.getUser().getUsername())
                 .comments(commentDTOS)
-                .createdDate(post.getCreatedAt())
-                .modifiedDate(post.getUpdatedAt())
+                .createdAt(post.getCreatedAt())
+                .modifiedAt(post.getUpdatedAt())
                 .build();
     }
     
@@ -245,6 +246,16 @@ public class PostService {
     @Transactional(readOnly = true)
     public List<PostResponseDto> findByCategoryOrderByRecommendCntDesc(Category category, Pageable pageable){
         return Repository.findByCategoryOrderByRecommendCntDesc(pageable, category).stream().map(PostResponseDto::fromManyPost).collect(Collectors.toList());
+    }
+    
+    // 카테고리 반환
+    @Transactional(readOnly = true)
+    public List<Category> findCategorys(){
+        List<Category> categoryList = Stream.of(Category.values())
+                .collect(Collectors.toList());
+
+
+        return categoryList;
     }
 
 }

@@ -13,6 +13,7 @@ public class PostCreateResponseDto {
     private String title;
     private String content;
     private String imageUrl;
+    private String hashTag;
     private LocalDateTime createdAt;
 
 
@@ -20,6 +21,7 @@ public class PostCreateResponseDto {
         return PostCreateResponseDto.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
+                .hashTag(post.getHashTag())
                 .createdAt(post.getCreatedAt())
                 .imageUrl(post.getImageUrl())
                 .build();
