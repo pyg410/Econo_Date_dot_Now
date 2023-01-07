@@ -29,7 +29,7 @@ public class PostRequestDto {
 
     private Category category; // 카테고리
 
-    private List<PostMap> map;
+    private List<PostMap> postMapList;
 
     private String imageUrl;
 
@@ -42,7 +42,7 @@ public class PostRequestDto {
                 .content(content)
                 .user(writer)
                 .category(category)
-                .postMapList(map) // 아마 DTO로 입력을 같이 받는게 아니라 별도의 Uri로 입력 받아야 하지 않을까??
+                .postMapList(postMapList) // 아마 DTO로 입력을 같이 받는게 아니라 별도의 Uri로 입력 받아야 하지 않을까??
                 .viewCnt(0)
                 .recommendCnt(0)
                 .imageUrl(imageUrl)

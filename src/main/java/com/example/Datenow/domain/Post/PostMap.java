@@ -14,17 +14,13 @@ public class PostMap {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double lat; // 위도
-
-    private Double lng; // 경도
-
     private Long expCost; // 예상 비용
     
     private String keyword; // 위치 키워드
 
     private String content; // 위치 내용
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) // 아마 PostMap.Post를 찾게되는 일은 없을 것 같은데 혹시 모를 확장에 대비해 양방향으로 해놓자
     @JoinColumn(name = "post_id")
     private Post post;
 
@@ -33,21 +29,13 @@ public class PostMap {
     private User user;
 
     @Builder
-    public PostMap(Double lat, Double lng, Long expCost, String keyword, String content, Post post, User user){
-        this.lat = lat;
-        this.lng = lng;
+    public PostMap(Long expCost, String keyword, String content, Post post, User user){
         this.expCost = expCost;
         this.keyword = keyword;
         this.content = content;
         this.post = post;
         this.user = user;
     }
-
-    public void changeLatLng(Double lat, Double lng) {
-        this.lat = lat;
-        this.lng = lng;
-    }
-
 
     public void changeExpCost(Long expCost) {
         this.expCost = expCost;

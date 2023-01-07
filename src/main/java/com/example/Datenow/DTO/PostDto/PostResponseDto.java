@@ -23,7 +23,7 @@ public class PostResponseDto {
     private String imageUrl; // 이미지 경로
     private Category category; // 카테고리
     private List<CommentResponseDto> comments; // 댓글들
-    private List<PostMapResponseDto> map; // 위도, 경도
+    private List<PostMapResponseDto> postMapList; // 위도, 경도
     private int commentCnt;
     private int viewCnt;
     private int recommendCnt;
@@ -36,7 +36,7 @@ public class PostResponseDto {
         return PostResponseDto.builder()
                 .writer(post.getUser().getUsername()) //String으로 반환하기
                 .category(post.getCategory())
-                .map(PostMapResponseDto.fromPostMapList(post.getPostMapList()))
+                .postMapList(PostMapResponseDto.fromPostMapList(post.getPostMapList()))
                 .imageUrl(post.getImageUrl())
                 .viewCnt(post.getViewCnt())
                 .recommendCnt(post.getRecommendCnt())

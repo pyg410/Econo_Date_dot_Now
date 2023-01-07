@@ -30,9 +30,10 @@ public class PostMapService {
 
     // PostMap 생성
     @Transactional
-    public PostMap save(PostMapRequestDto postMapDTO, Long postId, Long userId) {
+    public PostMap save(PostMapRequestDto postMapDTO, Long postId, Long userId) throws Exception{
 
-        // Post 생성
+        // Post 생성 예외처리하기
+        //Post post = postRepository.findById(postId).orElseThrow(() -> new Exception("Post가 Null값입니다."));
         Optional<Post> optPost = postRepository.findById(postId);
         Post post = optPost.get();
 
@@ -42,8 +43,6 @@ public class PostMapService {
         
         // PostMap 생성
         PostMap postMap = PostMap.builder()
-                        .lat(postMapDTO.getLat())
-                        .lng(postMapDTO.getLng())
                         .expCost(postMapDTO.getExpCost())
                         .keyword(postMapDTO.getKeyword())
                         .content(postMapDTO.getContent())
@@ -69,9 +68,9 @@ public class PostMapService {
         // 만약 PostMap 작성자와 현 유저의 id가 같다면
         if (postMap.getUser().getId().equals(userId)) {
             // 위도, 경도 변경하기
-            if (postDTO.getLat() != null || postDTO.getLng() != null) {
-                postMap.changeLatLng(postDTO.getLat(), postDTO.getLng());
-            }
+//            if (postDTO.getLat() != null || postDTO.getLng() != null) {
+//                postMap.changeLatLng(postDTO.getLat(), postDTO.getLng());
+//            }
             // 예상 비용 변경하기
             if (postDTO.getExpCost() != null) {
                 postMap.changeExpCost(postDTO.getExpCost());

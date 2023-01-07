@@ -28,7 +28,7 @@ public class PostMapController {
     @PostMapping("api/v1/postMaps/{postId}/{userId}")
     public ResponseEntity<PostMapResponseDto> save(@Valid PostMapRequestDto postDTO,
                                                       @PathVariable(name = "postId") Long postId,
-                                                      @PathVariable(name = "userId") Long userId) {
+                                                      @PathVariable(name = "userId") Long userId) throws Exception {
 
         PostMap postMap = postMapService.save(postDTO, postId, userId);
 
@@ -54,6 +54,6 @@ public class PostMapController {
                                               @PathVariable(name = "postMapId") Long postMapId) {
         postMapService.delete(postMapId, userId);
 
-        return new ResponseEntity("게시글 Map이 삭제되었습니다.", HttpStatus.OK);
+        return new ResponseEntity("게시글 PostMap이 삭제되었습니다.", HttpStatus.OK);
     }
 }

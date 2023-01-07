@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 import com.example.Datenow.domain.Category;
 import com.example.Datenow.domain.Comment;
+import com.example.Datenow.domain.Map;
 import com.example.Datenow.domain.User;
 import com.example.Datenow.domain.common.Date;
 import lombok.*;
@@ -48,6 +49,9 @@ public class Post extends Date {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<PostMap> postMapList = new ArrayList<>(); // postMap 리스트
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<Map> MapList = new ArrayList<>(); // Map 리스트
+
     private String imageUrl; // 이미지 경로
 
     @Enumerated(value = EnumType.STRING)
@@ -80,12 +84,24 @@ public class Post extends Date {
     public void changeImageUrl(String url) {
         this.imageUrl = url;
     }
+
     public void changeContents(String contents) {
         this.content = contents;
     }
 
     public void mappingPostLike(PostLike postLike) {
         this.postLikeList.add(postLike);
+    }
+
+    // 단방향 연관관계의 경우 이렇게 구현한다. -> 그러나 비추 :: Notion 참조
+    // N측에서 단순히 해당 메서드를 호출해주기만 하면 된다.
+//    public void addMap(Map map){
+//        if(map != null) {
+//            MapList.add(map);
+//        }
+//    }
+    public void mappingMap(Map map) {
+        this.MapList.add(map);
     }
 
     public void mappingUser(User user) {

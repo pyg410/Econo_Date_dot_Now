@@ -22,8 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,15 +49,6 @@ public class PostService {
         Optional<User> optUser = userRepository.findById(userId);
         User user = optUser.get();
 
-        // Map
-//        HashMap<Double, Double> map = new HashMap<>();
-//        map.put(postDTO.getLat(), postDTO.getLng());
-
-//        List<HashMap<Double, Double>> mapArray = new ArrayList<>();
-//        mapArray.add(map);
-
-
-
         // image
         if (multipartFile == null) {
             throw new IOException();
@@ -71,7 +60,6 @@ public class PostService {
                 .content(postDTO.getContent())
                 .user(user)
                 .category(postDTO.getCategory())
-                //.postMapList(mapArray)
                 .viewCnt(0)
                 .recommendCnt(0)
                 .imageUrl(imageUrl)
@@ -176,7 +164,7 @@ public class PostService {
                 .imageUrl(post.getImageUrl())
                 .category(post.getCategory())
                 .commentCnt(commentSize)
-                .map(postMapDTOS)
+                .postMapList(postMapDTOS)
                 .viewCnt(post.getViewCnt())
                 .recommendCnt(post.getRecommendCnt())
                 .writer(post.getUser().getUsername())
