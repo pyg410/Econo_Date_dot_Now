@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.example.Datenow.domain.User.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
