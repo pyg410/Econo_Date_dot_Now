@@ -25,7 +25,7 @@ public class UserJoinDTO {
     private LocalDate birth; // 생일
     @NotBlank(message = "휴대폰 번호를 입력해주세요.")
     @Pattern(regexp = "(01[016789])(\\d{3,4})(\\d{4})", message = "올바른 휴대폰 번호를 입력해주세요.")
-    private Long phoneNum; // 휴대폰 번호
+    private String phoneNum; // 휴대폰 번호
 
     private String profileImg; // 프로필 사진
 

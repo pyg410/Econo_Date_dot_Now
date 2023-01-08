@@ -19,7 +19,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     // 회원가입
-    public Long join(UserJoinDTO userJoinDTO){
+    public User join(UserJoinDTO userJoinDTO){
         // DTO -> User
         User user = User.builder()
                 .birth(userJoinDTO.getBirth())
@@ -32,12 +32,20 @@ public class UserService {
                 .created_at(LocalDateTime.now())
                 .build();
         //중복 회원 검증
-
+        duplicateUser(user);
 
         userRepository.save(user);
 
-        // ID값만 return. 엔티티 통째로 넘기면 위험하지않나?
-        return user.getId();
+        // ID값만 return. 엔티티 통째로 넘기면 위험하지않나? -> 나중에 DTO 반환해야겠다.
+        return user;
     }
 
+    private void duplicateUser(User user) {
+        if(userRepository.existsByName(user.getName())){
+            throw new IllegalStateException("이미 존재하는 이름입니다.");
+        }
+        if(userRepository.existsByEmail(user.getEmail())){
+            throw new IllegalStateException("이미 존재하는 이메일입니다.");
+        }
+    }
 }

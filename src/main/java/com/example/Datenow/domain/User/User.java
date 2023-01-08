@@ -1,8 +1,5 @@
 package com.example.Datenow.domain.User;
 
-import com.example.Datenow.domain.Comment;
-import com.example.Datenow.domain.Post;
-import com.example.Datenow.domain.PostLike;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -10,8 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Entity
 @Getter
@@ -27,7 +23,7 @@ public class User {
     private String name;
     private LocalDate birth;
     @Column(name = "phone_num")
-    private Long phoneNum;
+    private String phoneNum;
 
     @Column(name = "profile_img")
     private String profileImg;
@@ -41,7 +37,7 @@ public class User {
     private LocalDateTime modified_at;
 
     @Builder
-    public User(String password, String email, String name, LocalDate birth, Long phoneNum, String profileImg, Gender gender, LocalDateTime created_at) {
+    public User(String password, String email, String name, LocalDate birth, String phoneNum, String profileImg, Gender gender, LocalDateTime created_at) {
         this.password = password;
         this.email = email;
         this.name = name;
