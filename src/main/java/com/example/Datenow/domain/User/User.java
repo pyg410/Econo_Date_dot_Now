@@ -24,7 +24,7 @@ public class User {
 
     private String password;
     private String email;
-    private String nickname;
+    private String name;
     private LocalDate birth;
     @Column(name = "phone_num")
     private Long phoneNum;
@@ -41,16 +41,18 @@ public class User {
     private LocalDateTime modified_at;
 
     @Builder
-    public User(String password, String email, String nickname, LocalDate birth, Long phoneNum, String profileImg, Gender gender) {
+    public User(String password, String email, String name, LocalDate birth, Long phoneNum, String profileImg, Gender gender, LocalDateTime created_at) {
         this.password = password;
         this.email = email;
-        this.nickname = nickname;
+        this.name = name;
         this.birth = birth;
         this.phoneNum = phoneNum;
         this.profileImg = profileImg;
         this.gender = gender;
+        this.created_at = created_at;
     }
 
+    /*
     // Post
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Post> postList = new ArrayList<>();
@@ -62,4 +64,5 @@ public class User {
     // PostLike
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<PostLike> postLikeList = new ArrayList<>();
+     */
 }
