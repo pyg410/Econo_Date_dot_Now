@@ -6,6 +6,9 @@ spring:
     driver-class-name: org.h2.Driver
     sql-script-encoding: UTF-8
 
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
   jpa:
     hibernate:
@@ -31,20 +34,7 @@ logging.level:
   #org.hibernate.type: trace #바인딩된 파라미터까지 볼 수 있
 
 
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-    groups-order: DESC
-    operationsSorter: method
-    disable-swagger-default-url: true
-    display-request-duration: true
-  api-docs:
-    path: /api-docs
-  show-actuator: true
-  default-consumes-media-type: application/json
-  default-produces-media-type: application/json
-  paths-to-match:
-    - api/v1/**
+
 
 
 cloud:

@@ -42,6 +42,7 @@ public class PostController {
      */
     //===== Home =====//
     // 카테고리 반환
+    @Operation(summary = "get posts", description = "지역에 대한 posts들 가져오기")
     @GetMapping("api/v1/home/categorys")
     public ResponseEntity<List<Category>> findCategorys() {
         List<Category> categorys= postService.findCategorys();
