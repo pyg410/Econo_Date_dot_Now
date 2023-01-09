@@ -1,7 +1,6 @@
 package com.example.Datenow.service;
 
 import com.example.Datenow.DTO.CommentDto.CommentRequestDto;
-import com.example.Datenow.DTO.CommentDto.CommentResponseDto;
 import com.example.Datenow.domain.Comment;
 import com.example.Datenow.domain.Post.Post;
 import com.example.Datenow.domain.User;
@@ -13,31 +12,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class CommentService {
 
-    @Autowired private final CommentRepository Repository;
+    @Autowired private final CommentRepository repository;
     @Autowired private final PostRepository postRepository;
     @Autowired private final UserRepository userRepository;
 
     // 댓글 생성
     @Transactional
-    public Comment save(Long postId, CommentRequestDto commentRequestDto, Long userId) {
-        Optional<Post> optPost = postRepository.findById(postId);
+    public Comment save(Long postId, CommentRequestDto commentRequestDto, Long userId) throws Exception {
+        // new Exception -> Illegal등 특정 에러 문장 적기
+        // try - catch 문으로 에러 핸들링
+        //
+        Post post = postRepository.findById(postId).orElseThrow(() -> new Exception("Post가 Null값입니다."));
 
-        Post post = optPost.get();
-
-        //Post post = byId.orElseThrow(() -> new PostNotFound("게시물이 삭제되었거나 존재하지 않습니다."));
-
-        Optional<User> optUser = userRepository.findById(userId);
-
-        User user = optUser.get();
-        //User user = byEmail.orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
+        // User 생성 예외처리하기
+        User user = userRepository.findById(userId).orElseThrow(() -> new Exception("User가 Null값입니다."));
 
         Comment comment = Comment.builder()
                 .content(commentRequestDto.getContent())
@@ -47,16 +41,17 @@ public class CommentService {
 
         comment.mappingPostAndUser(post, user);
 
-        Comment saveComment = Repository.save(comment);
+        Comment saveComment = repository.save(comment);
 
         return saveComment;
     }
     
     // 댓글 수정
     @Transactional
-    public Comment update(Long commentId, Long userId, CommentRequestDto commentRequestDto) {
-        Optional<Comment> optComment = Repository.findById(commentId);
-        Comment comment = optComment.get();
+    public Comment update(Long commentId, Long userId, CommentRequestDto commentRequestDto) throws Exception {
+        // Comment 생성 예외처리하기
+        Comment comment = repository.findById(userId).orElseThrow(() -> new Exception("Comment가 Null값입니다."));
+
 
         // 만약 댓글 작성자와 현 유저의 id가 같다면
         if (comment.getUser().getId().equals(userId)) {
@@ -72,12 +67,13 @@ public class CommentService {
     
     // 댓글 삭제
     @Transactional
-    public void delete(Long commentId, Long userId) {
-        Optional<Comment> optComment = Repository.findById(commentId);
-        Comment comment = optComment.get();
+    public void delete(Long commentId, Long userId) throws Exception {
+        // Comment 생성 예외처리하기
+        Comment comment = repository.findById(userId).orElseThrow(() -> new Exception("Comment가 Null값입니다."));
+
 
         if (comment.getUser().getId().equals(userId)) {
-            Repository.delete(comment);
+            repository.delete(comment);
         } else {
             throw new IllegalStateException("권한이 없습니다.");
         }

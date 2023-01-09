@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 public class PostCreateResponseDto {
+    private Long id;
     private String title;
     private String content;
     private String imageUrl;
@@ -19,6 +20,7 @@ public class PostCreateResponseDto {
 
     public static PostCreateResponseDto fromCreatePost(Post post){
         return PostCreateResponseDto.builder()
+                .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .hashTag(post.getHashTag())

@@ -1,4 +1,4 @@
-package com.example.Datenow.DTO.PostDto;
+package com.example.Datenow.DTO.PostDto.MapDto;
 
 import lombok.Builder;
 import lombok.Getter;

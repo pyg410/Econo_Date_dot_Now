@@ -4,6 +4,8 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+    sql-script-encoding: UTF-8
+
 
   jpa:
     hibernate:
@@ -12,6 +14,14 @@ spring:
       hibernate:
         #show_sql: true
         format_sql: true
+    defer-datasource-initialization: true
+
+
+  sql:
+    init:
+      mode: always
+      encoding: UTF-8
+
 
 logging.level:
   org:
@@ -19,6 +29,7 @@ logging.level:
     springframework: debug
     springframework.web: debug
   #org.hibernate.type: trace #바인딩된 파라미터까지 볼 수 있
+
 
 springdoc:
   swagger-ui:

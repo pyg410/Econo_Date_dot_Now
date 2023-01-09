@@ -1,7 +1,8 @@
 package com.example.Datenow.controller;
 
 import com.example.Datenow.DTO.PostDto.*;
-import com.example.Datenow.domain.Post.Post;
+import com.example.Datenow.DTO.PostDto.PostMapDto.PostMapRequestDto;
+import com.example.Datenow.DTO.PostDto.PostMapDto.PostMapResponseDto;
 import com.example.Datenow.domain.Post.PostMap;
 import com.example.Datenow.service.PostMapService;
 import lombok.RequiredArgsConstructor;
@@ -10,10 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 
 
 @RestController
@@ -25,10 +24,10 @@ public class PostMapController {
     @Autowired private final PostMapService postMapService;
 
     // PostMap 생성
-    @PostMapping("api/v1/postMaps/{postId}/{userId}")
+    @PostMapping("api/v1/posts/{postId}/postmaps/{userId}")
     public ResponseEntity<PostMapResponseDto> save(@Valid PostMapRequestDto postDTO,
-                                                      @PathVariable(name = "postId") Long postId,
-                                                      @PathVariable(name = "userId") Long userId) throws Exception {
+                                                   @PathVariable(name = "postId") Long postId,
+                                                   @PathVariable(name = "userId") Long userId) throws Exception {
 
         PostMap postMap = postMapService.save(postDTO, postId, userId);
 
@@ -37,10 +36,10 @@ public class PostMapController {
 
     
     // PostMap 수정
-    @PutMapping("api/v1/postMaps/{postMapId}/{userId}")
+    @PutMapping("api/v1/posts/postmaps/{postMapId}/{userId}")
     public ResponseEntity<PostMapResponseDto> update(@Valid PostMapRequestDto postDTO,
                                                   @PathVariable(name = "userId") Long userId,
-                                                  @PathVariable(name = "postMapId") Long postMapId) {
+                                                  @PathVariable(name = "postMapId") Long postMapId) throws Exception {
 
         PostMap postMap = postMapService.updatePostMap(postDTO, postMapId, userId);
 
@@ -48,10 +47,10 @@ public class PostMapController {
     }
     
     // PostMap 삭제
-    @DeleteMapping("api/v1/postMaps/{postMapId}/{userId}")
+    @DeleteMapping("api/v1/postmaps/{postMapId}/{userId}")
     public ResponseEntity<PostLikeDto> delete(// 해당 userId는 추후 jwt를 이용한 Principal로 변경하기
                                               @PathVariable(name = "userId") Long userId,
-                                              @PathVariable(name = "postMapId") Long postMapId) {
+                                              @PathVariable(name = "postMapId") Long postMapId) throws Exception {
         postMapService.delete(postMapId, userId);
 
         return new ResponseEntity("게시글 PostMap이 삭제되었습니다.", HttpStatus.OK);

@@ -1,17 +1,14 @@
 package com.example.Datenow.service;
 
-import com.example.Datenow.DTO.PostDto.MapRequestDto;
+import com.example.Datenow.DTO.PostDto.MapDto.MapRequestDto;
 import com.example.Datenow.domain.Map;
 import com.example.Datenow.domain.Post.Post;
-import com.example.Datenow.domain.Post.PostMap;
 import com.example.Datenow.repository.MapRepository;
 import com.example.Datenow.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

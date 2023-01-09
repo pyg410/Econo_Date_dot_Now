@@ -1,7 +1,6 @@
 package com.example.Datenow.service;
 
-import com.example.Datenow.DTO.PostDto.PostMapRequestDto;
-import com.example.Datenow.DTO.PostDto.PostRequestDto;
+import com.example.Datenow.DTO.PostDto.PostMapDto.PostMapRequestDto;
 import com.example.Datenow.domain.Post.Post;
 import com.example.Datenow.domain.Post.PostMap;
 import com.example.Datenow.domain.User;
@@ -12,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,21 +22,19 @@ public class PostMapService {
 
     @Autowired private final UserRepository userRepository;
 
-    @Autowired private final PostMapRepository Repository;
+    @Autowired private final PostMapRepository repository;
 
     // PostMap 생성
     @Transactional
     public PostMap save(PostMapRequestDto postMapDTO, Long postId, Long userId) throws Exception{
 
         // Post 생성 예외처리하기
-        //Post post = postRepository.findById(postId).orElseThrow(() -> new Exception("Post가 Null값입니다."));
-        Optional<Post> optPost = postRepository.findById(postId);
-        Post post = optPost.get();
+        Post post = postRepository.findById(postId).orElseThrow(() -> new Exception("Post가 Null값입니다."));
 
-        // User 생성
-        Optional<User> optUser = userRepository.findById(userId);
-        User user = optUser.get();
-        
+        // User 생성 예외처리하기
+        User user = userRepository.findById(userId).orElseThrow(() -> new Exception("User가 Null값입니다."));
+
+
         // PostMap 생성
         PostMap postMap = PostMap.builder()
                         .expCost(postMapDTO.getExpCost())
@@ -53,17 +47,18 @@ public class PostMapService {
         postMap.mappingPost(post);
         postMap.mappingUser(user);
 
-        PostMap responsePostMap = Repository.save(postMap);
+        PostMap responsePostMap = repository.save(postMap);
 
         return responsePostMap;
     }
 
     // PostMap 수정
     @Transactional
-    public PostMap updatePostMap(PostMapRequestDto postDTO, Long postMapId, Long userId) {
+    public PostMap updatePostMap(PostMapRequestDto postDTO, Long postMapId, Long userId) throws Exception {
 
-        Optional<PostMap> optPostMap = Repository.findById(postMapId);
-        PostMap postMap = optPostMap.get();
+
+        PostMap postMap = repository.findById(postMapId).orElseThrow(() -> new Exception("PostMap이 Null값입니다."));
+
 
         // 만약 PostMap 작성자와 현 유저의 id가 같다면
         if (postMap.getUser().getId().equals(userId)) {
@@ -94,13 +89,13 @@ public class PostMapService {
 
     // PostMap 삭제
     @Transactional
-    public void delete(Long postMapId, Long userId) {
-        Optional<PostMap> optPostMap = Repository.findById(postMapId);
-        PostMap postMap = optPostMap.get();
+    public void delete(Long postMapId, Long userId) throws Exception {
+        PostMap postMap = repository.findById(postMapId).orElseThrow(() -> new Exception("PostMap이 Null값입니다."));
+
 
         if (postMap.getUser().getId().equals(userId)) {
             // postMap을 삭제한다.
-            Repository.delete(postMap);
+            repository.delete(postMap);
         } else {
             throw new IllegalStateException("권한이 없습니다.");
         }

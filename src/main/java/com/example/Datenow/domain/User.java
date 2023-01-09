@@ -22,6 +22,8 @@ public class User  {
 
     private String nickname;
 
+    private String profileImg;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Post> postList = new ArrayList<>();
 

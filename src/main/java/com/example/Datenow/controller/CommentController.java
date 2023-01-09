@@ -21,11 +21,11 @@ public class CommentController {
     @Autowired private final CommentService commentService;
     
     // 댓글 생성
-    @PostMapping("api/v1/comments/{postId}/{userId}")
+    @PostMapping("api/v1/posts/{postId}/comments/{userId}")
     public ResponseEntity<CommentResponseDto> save(@Valid CommentRequestDto commentDTO,
                                                    // 해당 userId는 추후 jwt를 이용한 Principal로 변경하기
                                                    @PathVariable(name = "postId") Long postId,
-                                                   @PathVariable(name = "userId") Long userId) {
+                                                   @PathVariable(name = "userId") Long userId) throws Exception {
 
         Comment comment = commentService.save(postId, commentDTO, userId);
 
@@ -34,11 +34,11 @@ public class CommentController {
 
     
     // 댓글 수정
-    @PutMapping("api/v1/comments/{commentId}/{userId}")
+    @PutMapping("api/v1/posts/comments/{commentId}/{userId}")
     public ResponseEntity<CommentResponseDto> update(@Valid CommentRequestDto commentDTO,
                                                    // 해당 userId는 추후 jwt를 이용한 Principal로 변경하기
                                                    @PathVariable(name = "commentId") Long commentId,
-                                                   @PathVariable(name = "userId") Long userId) {
+                                                   @PathVariable(name = "userId") Long userId) throws Exception {
 
         Comment comment = commentService.update(commentId, userId, commentDTO);
 
@@ -47,11 +47,11 @@ public class CommentController {
     
     
     // 댓글 삭제
-    @DeleteMapping("api/v1/comments/{commentId}/{userId}")
+    @DeleteMapping("api/v1/posts/comments/{commentId}/{userId}")
     public ResponseEntity<CommentResponseDto> delete(@Valid CommentRequestDto commentDTO,
                                                      // 해당 userId는 추후 jwt를 이용한 Principal로 변경하기
                                                      @PathVariable(name = "commentId") Long commentId,
-                                                     @PathVariable(name = "userId") Long userId) {
+                                                     @PathVariable(name = "userId") Long userId) throws Exception {
 
         commentService.delete(commentId, userId);
         return new ResponseEntity("잘 삭제 되었습니다!", HttpStatus.OK);

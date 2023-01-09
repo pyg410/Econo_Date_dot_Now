@@ -20,6 +20,8 @@ public class CommentResponseDto {
 
     private String writer;
 
+    private String profileImg;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -29,6 +31,7 @@ public class CommentResponseDto {
                 .content(comment.getContent())
                 .post(comment.getPost().getTitle())
                 .writer(comment.getUser().getUsername())
+                .profileImg(comment.getUser().getProfileImg())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
                 .build();

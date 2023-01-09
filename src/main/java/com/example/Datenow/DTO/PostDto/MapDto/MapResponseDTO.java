@@ -1,9 +1,6 @@
-package com.example.Datenow.DTO.PostDto;
+package com.example.Datenow.DTO.PostDto.MapDto;
 
-import com.example.Datenow.DTO.CommentDto.CommentResponseDto;
-import com.example.Datenow.domain.Comment;
-import com.example.Datenow.domain.Post.Post;
-import com.example.Datenow.domain.Post.PostMap;
+import com.example.Datenow.domain.Map;
 import lombok.*;
 
 import java.util.List;
@@ -14,24 +11,24 @@ import java.util.stream.Stream;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Builder
-public class PostMapResponseDto {
-    private Long expCost; // 예상 비용
+public class MapResponseDTO {
+    private Long id;
 
-    private String keyword; // 위치 키워드
+    private Double lat; // 위도
 
-    private String content; // 위치 내용
+    private Double lng; // 경도
 
-    public static PostMapResponseDto FromPostMap(PostMap postMap) {
-        return PostMapResponseDto.builder()
-                .expCost(postMap.getExpCost())
-                .keyword(postMap.getKeyword())
-                .content(postMap.getContent())
+    public static MapResponseDTO fromMap(Map map){
+        return MapResponseDTO.builder()
+                .id(map.getId())
+                .lat(map.getLat())
+                .lng(map.getLng())
                 .build();
     }
 
-    public static List<PostMapResponseDto> fromPostMapList(List<PostMap> postMapList) {
+    public static List<MapResponseDTO> fromMapList(List<Map> mapList) {
         // 생성하기 : 스트림 인스턴스 생성.
-        Stream<PostMap> stream = postMapList.stream();
+        Stream<Map> stream = mapList.stream();
 
         // 가공하기 : 필터링(filtering) 및 맵핑(mapping) 등 원하는 결과를 만들어가는 중간 작업(intermediate operations).
         // 맵(map)은 스트림 내 요소들을 하나씩 특정 값으로 변환해줍니다. 이 때 값을 변환하기 위한 람다를 인자로 받습니다.
@@ -40,6 +37,6 @@ public class PostMapResponseDto {
         /*
         즉 CommentResponseDto 자료형을 가진 스트림 내 요소들을 FromComment에 맞게 바꿔준 후 하나의 리스트로 만들어준다.
          */
-        return stream.map(PostMapResponseDto::FromPostMap).collect(Collectors.toList());
+        return stream.map(MapResponseDTO::fromMap).collect(Collectors.toList());
     }
 }

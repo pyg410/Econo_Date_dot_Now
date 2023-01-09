@@ -39,7 +39,6 @@ public class Post extends Date {
     @JoinColumn(name = "user_id") // FK이름 지정
     private User user; // User 객체 자체를 저장받고, 반환할 때는 Post에 저장된 USER.getUsername 반환
 
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE) // 부모쪽에 cascade = CascadeType.REMOVE 설정
     private List<Comment> commentList = new ArrayList<>(); // 댓글들
 
