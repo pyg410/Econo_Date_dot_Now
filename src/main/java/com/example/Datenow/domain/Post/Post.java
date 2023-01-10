@@ -112,7 +112,6 @@ public class Post extends Date {
         this.postMapList.add(postmap);
     }
 
-
     public void mappingComment(Comment comment) {
         this.commentList.add(comment);
     }

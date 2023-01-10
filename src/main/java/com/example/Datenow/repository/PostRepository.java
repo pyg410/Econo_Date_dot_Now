@@ -19,18 +19,14 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     // 게시글 전체 반환
     Page<Post> findAll(Pageable pageable);
 
-
     // 게시글 1개 반환
     Optional<Post> findById(Long postId);
-
 
     // 게시글 생성 및 업데이트
     Post save(Post post);
 
-
     // 게시글 삭제
     void delete(Post post);
-
 
     // 추천순 정렬
     List<Post> findAllByOrderByRecommendCntDesc(Pageable pageable);

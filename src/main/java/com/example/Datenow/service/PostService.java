@@ -259,6 +259,7 @@ public class PostService {
         int commentSize = post.getCommentList().size();
 
         return PostResponseDto.builder()
+                .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .imageUrl(post.getImageUrl())

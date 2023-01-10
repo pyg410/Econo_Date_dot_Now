@@ -18,8 +18,10 @@ import java.util.List;
 // Dto class에 toEntity 함수를 정의해서 entity로 바꿀수 있다. (DB에 등록할때 쓰임)
 public class PostRequestDto {
 
+    @NotBlank(message = "제목은 필수 입력값입니다.")
     private String title; // 제목
 
+    @NotBlank(message = "내용은 필수 입력값입니다.")
     private String content; // 내용
     
     private User writer; // 작성자

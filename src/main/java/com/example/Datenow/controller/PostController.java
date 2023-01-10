@@ -16,6 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import javax.validation.Valid;
@@ -168,6 +170,7 @@ public class PostController {
                                                       @RequestPart(value ="image") MultipartFile multipartFile,
                                                       // 해당 userId는 추후 jwt를 이용한 Principal로 변경하기
                                                       @PathVariable(name = "id") Long userId) throws Exception {
+
 
         Post post = postService.save(postDTO, multipartFile, userId);
 
