@@ -14,11 +14,11 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // 생성자를 통해서 값 변경 목적으로 접근하는 메시지들 차단
-@Entity
+//@Getter
+//@NoArgsConstructor(access = AccessLevel.PROTECTED) // 생성자를 통해서 값 변경 목적으로 접근하는 메시지들 차단
+//@Entity
 public class Post{
-
+/*
     @Id
     @Column(name = "board_id") // 엔티티는 타입(ex:Meber)가 있으므로, id 필드만으로 구별이 쉽지만, DB의 경우 타입이 없기에 id라고 이름을 지으면 구별하기 어렵다.
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 DB에 위임
@@ -65,4 +65,6 @@ public class Post{
         this.modifiedDate = modifiedDate;
         this.imageUrl = imageUrl;
     }
+
+ */
 }

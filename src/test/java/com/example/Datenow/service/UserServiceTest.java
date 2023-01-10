@@ -1,16 +1,14 @@
 package com.example.Datenow.service;
 
-import com.example.Datenow.DTO.UserJoinDTO;
+import com.example.Datenow.DTO.UserSignupDTO;
 import com.example.Datenow.domain.User.Gender;
 
 import com.example.Datenow.domain.User.User;
-import com.example.Datenow.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +22,8 @@ public class UserServiceTest {
 
     @Autowired private UserService userService;
 
-    public UserJoinDTO initSignupDTO(){
-        return UserJoinDTO.builder()
+    public UserSignupDTO initSignupDTO(){
+        return UserSignupDTO.builder()
                 .email("a@naver.com")
                 .password("password")
                 .name("nickname")
@@ -39,14 +37,14 @@ public class UserServiceTest {
     @Test
     public void 회원가입() throws Exception{
         // given
-        UserJoinDTO userJoinDTO = initSignupDTO();
+        UserSignupDTO userSignupDTO = initSignupDTO();
 
         // when
-        User user = userService.join(userJoinDTO);
+        User user = userService.join(userSignupDTO);
 
         // then
-        assertThat(userJoinDTO.getEmail()).isEqualTo(user.getEmail());
-        assertThat(userJoinDTO.getName()).isEqualTo(user.getName());
+        assertThat(userSignupDTO.getEmail()).isEqualTo(user.getEmail());
+        assertThat(userSignupDTO.getName()).isEqualTo(user.getName());
     }
 
     @Test

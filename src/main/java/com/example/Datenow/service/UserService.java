@@ -1,6 +1,6 @@
 package com.example.Datenow.service;
 
-import com.example.Datenow.DTO.UserJoinDTO;
+import com.example.Datenow.DTO.UserSignupDTO;
 import com.example.Datenow.domain.User.User;
 import com.example.Datenow.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +19,16 @@ public class UserService {
     private final UserRepository userRepository;
 
     // 회원가입
-    public User join(UserJoinDTO userJoinDTO){
+    public User join(UserSignupDTO userSignupDTO){
         // DTO -> User
         User user = User.builder()
-                .birth(userJoinDTO.getBirth())
-                .profileImg(userJoinDTO.getProfileImg())
-                .phoneNum(userJoinDTO.getPhoneNum())
-                .email(userJoinDTO.getEmail())
-                .gender(userJoinDTO.getGender())
-                .name(userJoinDTO.getName())
-                .password(userJoinDTO.getPassword())
+                .birth(userSignupDTO.getBirth())
+                .profileImg(userSignupDTO.getProfileImg())
+                .phoneNum(userSignupDTO.getPhoneNum())
+                .email(userSignupDTO.getEmail())
+                .gender(userSignupDTO.getGender())
+                .name(userSignupDTO.getName())
+                .password(userSignupDTO.getPassword())
                 .created_at(LocalDateTime.now())
                 .build();
         //중복 회원 검증
