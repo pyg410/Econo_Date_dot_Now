@@ -1,6 +1,6 @@
 package com.example.Datenow.service;
 
-import com.example.Datenow.DTO.UserSignupDTO;
+import com.example.Datenow.DTO.user.UserSignupDTO;
 import com.example.Datenow.domain.User.User;
 import com.example.Datenow.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
@@ -41,11 +42,10 @@ public class UserService {
     }
 
     private void duplicateUser(User user) {
-        if(userRepository.existsByName(user.getName())){
-            throw new IllegalStateException("이미 존재하는 이름입니다.");
+        List<User> duplicatedUser = userRepository.findByNameOrEmail(user.getName(), user.getEmail());
+        if(!duplicatedUser.isEmpty()){
+            throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
-        if(userRepository.existsByEmail(user.getEmail())){
-            throw new IllegalStateException("이미 존재하는 이메일입니다.");
-        }
+
     }
 }

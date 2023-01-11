@@ -1,9 +1,10 @@
 package com.example.Datenow.service;
 
-import com.example.Datenow.DTO.UserSignupDTO;
+import com.example.Datenow.DTO.user.UserSignupDTO;
 import com.example.Datenow.domain.User.Gender;
 
 import com.example.Datenow.domain.User.User;
+import com.example.Datenow.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
@@ -21,16 +22,17 @@ import java.time.LocalDate;
 public class UserServiceTest {
 
     @Autowired private UserService userService;
+    @Autowired private UserRepository userRepository;
 
     public UserSignupDTO initSignupDTO(){
         return UserSignupDTO.builder()
                 .email("a@naver.com")
-                .password("password")
+                .password("password!1A")
                 .name("nickname")
                 .birth(LocalDate.now())
                 .profileImg(null)
                 .gender(Gender.MAN)
-                .phoneNum("010 1234 1234")
+                .phoneNum("01012341234")
                 .build();
     }
 
@@ -43,8 +45,8 @@ public class UserServiceTest {
         User user = userService.join(userSignupDTO);
 
         // then
-        assertThat(userSignupDTO.getEmail()).isEqualTo(user.getEmail());
-        assertThat(userSignupDTO.getName()).isEqualTo(user.getName());
+        assertThat(user).isEqualTo(userRepository.findById(user.getId()).get());
+
     }
 
     @Test
@@ -52,9 +54,31 @@ public class UserServiceTest {
         // given
         User user1 = userService.join(initSignupDTO());
 
+
         // when
         assertThrows(IllegalStateException.class, () ->{
             User user2 = userService.join(initSignupDTO());
+        });
+
+        // then
+        fail("예외가 발생해야합니다!");
+    }
+
+    @Test
+    public void 유효성검사() throws Exception{
+        // given
+
+        // when
+        assertThrows(IllegalStateException.class, () ->{
+            UserSignupDTO userSignupDTO = UserSignupDTO.builder()
+                        .email("anavercom")
+                        .password("password")
+                        .name("e")
+                        .birth(LocalDate.now())
+                        .profileImg(null)
+                        .gender(Gender.MAN)
+                        .phoneNum("12341234")
+                        .build();
         });
 
         // then

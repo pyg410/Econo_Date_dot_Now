@@ -1,4 +1,4 @@
-package com.example.Datenow.DTO;
+package com.example.Datenow.DTO.user;
 
 import com.example.Datenow.domain.User.User;
 import lombok.AllArgsConstructor;
@@ -8,6 +8,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @AllArgsConstructor
 public class UserResponseDTO {
 
@@ -21,15 +22,17 @@ public class UserResponseDTO {
 
     private LocalDateTime createBy;
 
-    /*
-    public static UserResponseDTO touserResponseDTO(User user){
+
+    public static UserResponseDTO toResponseDTO(User user){
         return UserResponseDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
+                .password(user.getPassword())
                 .name(user.getName())
+                .createBy(user.getCreated_at())
                 .build();
     }
-    */
+
 
 
 }
